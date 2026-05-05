@@ -21,10 +21,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface ModuleClientProps {
   sector: string
-  module: string
+  moduleId: string
 }
 
-export default function ModuleClient({ sector, module }: ModuleClientProps) {
+export default function ModuleClient({ sector, moduleId }: ModuleClientProps) {
   const [loading, setLoading] = useState(true)
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -81,7 +81,7 @@ export default function ModuleClient({ sector, module }: ModuleClientProps) {
 
   const getModuleData = () => {
     const moduleData = {
-      title: `Demo de ${module}`,
+      title: `Demo de ${moduleId}`,
       description: "Esta demostración interactiva muestra las capacidades clave de este módulo.",
       steps: [
         {
@@ -212,8 +212,8 @@ export default function ModuleClient({ sector, module }: ModuleClientProps) {
         {/* Main content - Demo */}
         <div className="lg:col-span-3">
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
             <div className="border-b">
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList className="w-full justify-start border-b-0 rounded-none">
                   <TabsTrigger value="demo" className="flex items-center gap-1">
                     <Play className="h-4 w-4" />
@@ -232,7 +232,6 @@ export default function ModuleClient({ sector, module }: ModuleClientProps) {
                     Implementación
                   </TabsTrigger>
                 </TabsList>
-              </Tabs>
             </div>
 
             <div className="p-4">
@@ -327,6 +326,7 @@ export default function ModuleClient({ sector, module }: ModuleClientProps) {
                 </div>
               </TabsContent>
             </div>
+            </Tabs>
           </div>
         </div>
       </div>
