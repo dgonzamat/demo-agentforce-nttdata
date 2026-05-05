@@ -41,6 +41,6 @@ export default async function Page({
 }: {
   params: Promise<{ sector: string; module: string }>
 }) {
-  const { sector, module } = await params
-  return <ModuleClient sector={sector} module={module} />
+  const { sector, module: moduleId } = await params
+  return <ModuleClient sector={sector} moduleId={moduleId} />
 }
