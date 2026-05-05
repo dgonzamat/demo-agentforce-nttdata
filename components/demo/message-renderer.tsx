@@ -1,9 +1,11 @@
 import type { ReactNode } from "react"
+import { Bot } from "lucide-react"
 import type { MessageType } from "@/hooks/use-conversation-player"
 
 interface MessageRendererProps {
   message: MessageType
   avatars: Record<string, string>
+  timestamp?: string
   renderSignaturePanel?: () => ReactNode
   renderIdentityPanel?: () => ReactNode
   renderContractorPanel?: () => ReactNode
@@ -14,6 +16,7 @@ interface MessageRendererProps {
 export function MessageRenderer({
   message,
   avatars,
+  timestamp,
   renderSignaturePanel,
   renderIdentityPanel,
   renderContractorPanel,
@@ -22,20 +25,16 @@ export function MessageRenderer({
 }: MessageRendererProps) {
   if (!message.visible) return null
 
-  // Si está en modo "Razonando"
   if (message.reasoning) {
     return (
-      <div className="flex items-start gap-2 mb-4">
-        <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-blue-900 flex items-center justify-center">
-          <img src={avatars.bot || "/placeholder.svg"} alt="AgentForce" className="w-full h-full object-cover" />
-        </div>
-        <div className="p-3 rounded-lg bg-white border border-gray-200 text-blue-800 font-medium flex items-center">
-          <div className="animate-pulse mr-2">Razonando</div>
+      <div className="flex items-start gap-3 mb-5">
+        <BotIcon />
+        <div className="bg-white rounded-2xl rounded-tl-sm border border-slate-200 px-4 py-3 text-blue-800 font-medium flex items-center shadow-sm">
+          <span className="mr-2 text-slate-700">Razonando</span>
           <div className="flex space-x-1">
-            <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
-            <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
-            <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></div>
-            <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: "600ms" }}></div>
+            <Dot delay={0} />
+            <Dot delay={150} />
+            <Dot delay={300} />
           </div>
         </div>
       </div>
@@ -46,71 +45,83 @@ export function MessageRenderer({
     ? message.text.substring(0, Math.floor(message.text.length * 0.7)) + "▌"
     : message.text
 
-  // Procesar el texto para manejar listas numeradas y viñetas
   const renderedText = textContent.split("\n").map((line, i) => {
-    // Detectar listas numeradas (1. Item)
     if (/^\d+\.\s/.test(line)) {
       return (
-        <li key={i} className="ml-5">
+        <li key={i} className="ml-5 leading-relaxed">
           {line}
         </li>
       )
     }
-    // Detectar listas con guiones (- Item)
     if (/^-\s/.test(line)) {
       return (
-        <li key={i} className="ml-5 list-disc">
+        <li key={i} className="ml-5 list-disc leading-relaxed">
           {line.substring(2)}
         </li>
       )
     }
     return (
-      <p key={i} className={i > 0 ? "mt-2" : ""}>
+      <p key={i} className={`leading-relaxed ${i > 0 ? "mt-2" : ""}`}>
         {line}
       </p>
     )
   })
 
-  // Verificar si este mensaje debe mostrar los diferentes paneles
   const shouldShowSignaturePanel = message.showSignaturePanel && !message.typing
   const shouldShowIdentityPanel = message.showIdentityPanel && !message.typing
   const shouldShowContractorPanel = message.showContractorPanel && !message.typing
   const shouldShowConsumptionPanel = message.showConsumptionPanel && !message.typing
   const shouldShowTarifaPanel = message.showTarifaPanel && !message.typing
 
+  const isBot = message.sender === "bot"
+
   return (
-    <div className="flex flex-col gap-2 mb-4">
-      <div className="flex items-start gap-2">
-        {message.sender === "bot" ? (
-          <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-blue-900 flex items-center justify-center">
-            <img src={avatars.bot || "/placeholder.svg"} alt="AgentForce" className="w-full h-full object-cover" />
+    <div className="flex flex-col mb-5">
+      {isBot ? (
+        <div className="flex items-start gap-3 max-w-[88%]">
+          <BotIcon />
+          <div className="min-w-0">
+            <div className="bg-white rounded-2xl rounded-tl-sm border border-slate-200 px-4 py-3 text-slate-800 shadow-sm">
+              {renderedText}
+            </div>
+            {timestamp && <div className="text-xs text-slate-400 mt-1 ml-1">{timestamp}</div>}
           </div>
-        ) : (
-          <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-amber-100">
+        </div>
+      ) : (
+        <div className="flex items-start gap-3 max-w-[88%] ml-auto">
+          <div className="min-w-0 flex flex-col items-end">
+            <div className="bg-blue-500 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm">{renderedText}</div>
+            {timestamp && <div className="text-xs text-slate-400 mt-1 mr-1">{timestamp}</div>}
+          </div>
+          <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-white shadow-sm shrink-0 bg-amber-100">
             <img src={avatars.client || "/placeholder.svg"} alt="Cliente" className="w-full h-full object-cover" />
           </div>
-        )}
-        <div
-          className={`p-3 rounded-lg max-w-[80%] ${
-            message.sender === "client"
-              ? "bg-blue-600 text-white ml-auto"
-              : "bg-white border border-gray-200 text-black"
-          }`}
-        >
-          {renderedText}
         </div>
-      </div>
+      )}
 
-      {/* Mostrar los diferentes paneles debajo del mensaje correspondiente */}
-      {shouldShowSignaturePanel && renderSignaturePanel && <div className="ml-12 mt-2">{renderSignaturePanel()}</div>}
-      {shouldShowIdentityPanel && renderIdentityPanel && <div className="ml-12 mt-2">{renderIdentityPanel()}</div>}
+      {shouldShowSignaturePanel && renderSignaturePanel && <div className="ml-12 mt-3">{renderSignaturePanel()}</div>}
+      {shouldShowIdentityPanel && renderIdentityPanel && <div className="ml-12 mt-3">{renderIdentityPanel()}</div>}
       {shouldShowContractorPanel && renderContractorPanel && (
-        <div className="ml-12 mt-2">{renderContractorPanel()}</div>
+        <div className="ml-12 mt-3">{renderContractorPanel()}</div>
       )}
       {shouldShowConsumptionPanel && renderConsumptionPanel && (
-        <div className="ml-12 mt-2">{renderConsumptionPanel()}</div>
+        <div className="ml-12 mt-3">{renderConsumptionPanel()}</div>
       )}
-      {shouldShowTarifaPanel && renderTarifaPanel && <div className="ml-12 mt-2">{renderTarifaPanel()}</div>}
+      {shouldShowTarifaPanel && renderTarifaPanel && <div className="ml-12 mt-3">{renderTarifaPanel()}</div>}
     </div>
+  )
+}
+
+function BotIcon() {
+  return (
+    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 ring-2 ring-white shadow-sm flex items-center justify-center shrink-0">
+      <Bot className="h-5 w-5 text-white" />
+    </div>
+  )
+}
+
+function Dot({ delay }: { delay: number }) {
+  return (
+    <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: `${delay}ms` }} />
   )
 }

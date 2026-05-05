@@ -1,39 +1,31 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import Link from "next/link"
 import {
-  Play,
-  Pause,
-  RefreshCw,
   Check,
   FileText,
   HelpCircle,
   BarChart,
   FileSignature,
   CheckCircle,
-  Maximize,
-  Minimize,
   Shield,
   Umbrella,
   Heart,
-  ChevronLeft,
-  Download,
-  Gauge,
+  User,
+  Briefcase,
+  Activity,
+  Sparkles,
+  ChevronRight,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { useConversationPlayer } from "@/hooks/use-conversation-player"
 import { useIdentityVerification } from "@/hooks/use-identity-verification"
 import { useDigitalSignature } from "@/hooks/use-digital-signature"
 import { useFullscreen } from "@/hooks/use-fullscreen"
-import { ProcessRoadmap } from "@/components/demo/process-roadmap"
 import { IdentityPanel } from "@/components/demo/identity-panel"
 import { SignaturePanel } from "@/components/demo/signature-panel"
-import { StepTimer } from "@/components/demo/step-timer"
-import { MinimalControls } from "@/components/demo/minimal-controls"
 import { MessageRenderer } from "@/components/demo/message-renderer"
-import { SpeedControl } from "@/components/demo/speed-control"
-import { downloadDemo } from "@/utils/download-demo"
+import { ConsoleShell, ConsoleCard, FieldRow } from "@/components/demo/console-shell"
+import { ChatPanel } from "@/components/demo/chat-panel"
 import { asset } from "@/lib/asset"
 
 export default function SegurosDemo() {
@@ -245,316 +237,247 @@ export default function SegurosDemo() {
     resetSignature()
   }
 
-  // Función para manejar cambios de velocidad
-  const handleSpeedChange = useCallback(
-    (speed: number) => {
-      console.log("SegurosDemo: Cambiando velocidad a:", speed)
-      // Validar que la velocidad es un número válido
-      if (typeof speed === "number" && !isNaN(speed) && speed > 0) {
-        changePlaybackSpeed(speed)
-      } else {
-        console.error("Velocidad inválida:", speed)
-      }
-    },
-    [changePlaybackSpeed],
-  )
-
   const currentStageName = processStages.find((s) => s.id === currentProcessStage)?.name || ""
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50" ref={containerRef}>
-      {/* Header */}
-      {!fullscreen && (
-        <header className="bg-white border-b sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-white/90">
-          <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3 min-w-0">
-              <Link href="/" className="text-slate-500 hover:text-slate-900 flex items-center gap-1 text-sm shrink-0">
-                <ChevronLeft className="h-4 w-4" />
-                <span className="hidden sm:inline">Inicio</span>
-              </Link>
-              <div className="h-6 w-px bg-slate-200" />
-              <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 shrink-0" />
-              <span className="text-slate-300 hidden md:inline">|</span>
-              <div className="hidden md:flex items-center gap-2 min-w-0">
-                <div className="w-7 h-7 rounded-md bg-blue-50 flex items-center justify-center shrink-0">
-                  <Shield className="h-4 w-4 text-blue-600" />
-                </div>
-                <span className="font-medium truncate">Seguros · Contratación</span>
+    <ConsoleShell
+      industryConsole="Insurance Service Console"
+      customerName="Carolina Soto"
+      playing={playing}
+      progress={progress}
+      onTogglePlay={togglePlay}
+      onReset={handleReset}
+      leftPanel={
+        <>
+          <ConsoleCard
+            icon={
+              <div className="w-9 h-9 rounded-md bg-slate-100 flex items-center justify-center">
+                <User className="h-5 w-5 text-slate-500" />
               </div>
+            }
+            title="Customer"
+          >
+            <div className="text-base font-semibold text-slate-900 -mt-2 mb-3">Carolina Soto</div>
+            <div className="grid grid-cols-2 gap-3">
+              <FieldRow label="Customer ID" value="CUST-78429103" />
+              <FieldRow label="Segment" value="Gold" />
+              <FieldRow label="Policyholder Since" value="Mar 15, 2019" />
+              <FieldRow label="Relationship Manager" value="Jorge Ramírez" />
             </div>
-            <div className="flex items-center gap-2">
-              <SpeedControl currentSpeed={playbackSpeed} onSpeedChange={handleSpeedChange} className="hidden lg:flex" />
-              <Button
-                variant={playing ? "destructive" : "default"}
-                size="sm"
-                onClick={togglePlay}
-                className="flex items-center"
-              >
-                {playing ? <Pause className="mr-1.5 h-4 w-4" /> : <Play className="mr-1.5 h-4 w-4" />}
-                <span className="hidden sm:inline">
-                  {playing ? "Pausar" : progress === 100 ? "Reiniciar" : "Reproducir"}
-                </span>
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleReset} className="hidden sm:flex">
-                <RefreshCw className="mr-1.5 h-4 w-4" />
-                Reiniciar
-              </Button>
-              <Button variant="outline" size="sm" onClick={toggleFullscreen} className="hidden md:flex">
-                <Maximize className="mr-1.5 h-4 w-4" />
-                Pantalla completa
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => downloadDemo(containerRef)}
-                className="hidden lg:flex text-slate-600"
-                title="Descargar para LinkedIn"
-              >
-                <Download className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-          <div className="h-1 bg-slate-100">
-            <div
-              className="h-full bg-gradient-to-r from-blue-500 to-blue-700 transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        </header>
-      )}
+          </ConsoleCard>
 
-      <div className={`flex-1 ${fullscreen ? "bg-black p-0" : "py-6 md:py-8"}`}>
-        <div
-          className={
-            fullscreen
-              ? "flex flex-col h-full justify-center items-center px-4 max-w-5xl mx-auto w-full"
-              : "container mx-auto px-4"
-          }
-        >
-          {fullscreen && (
-            <div className="w-full mb-4">
-              <ProcessRoadmap stages={processStages} currentStage={currentProcessStage} />
+          <ConsoleCard
+            icon={
+              <div className="w-7 h-7 rounded-md bg-blue-50 flex items-center justify-center">
+                <Briefcase className="h-4 w-4 text-blue-600" />
+              </div>
+            }
+            title="Customer 360"
+          >
+            <div className="-mx-4 -mt-4 px-4 border-b flex gap-4 text-xs">
+              {["Summary", "Policies", "Claims", "Related"].map((t, i) => (
+                <button
+                  key={t}
+                  className={`py-2 -mb-px ${
+                    i === 0
+                      ? "text-blue-600 border-b-2 border-blue-600 font-medium"
+                      : "text-slate-500 hover:text-slate-700"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
             </div>
-          )}
+            <div className="space-y-3 pt-4">
+              <Row label="Total Policies" value="4" />
+              <Row label="Total Coverage" value="$1.250.000.000" />
+              <Row label="Total Premium (Annual)" value="$2.450.000" />
+              <Row label="Active Claims" value="0" />
+              <Row label="Loyalty Level" value="Gold" />
+              <Row
+                label="Risk Score"
+                value={
+                  <span className="bg-emerald-100 text-emerald-700 text-xs font-medium px-2 py-0.5 rounded">
+                    Low
+                  </span>
+                }
+              />
+            </div>
+          </ConsoleCard>
 
-          <div
-            className={
-              fullscreen
-                ? "w-full max-w-2xl"
-                : "grid grid-cols-1 lg:grid-cols-12 gap-6"
+          <ConsoleCard title="Etapas del proceso">
+            <ol className="space-y-0.5 -mx-1">
+              {processStages.map((stage) => {
+                const Icon = stage.icon
+                const isDone = currentProcessStage > stage.id
+                const isActive = currentProcessStage === stage.id
+                return (
+                  <li key={stage.id} className="relative">
+                    <div
+                      className={`flex items-center gap-2.5 p-1.5 rounded transition-colors ${
+                        isActive ? "bg-blue-50" : ""
+                      }`}
+                    >
+                      <div
+                        className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${
+                          isDone
+                            ? "bg-blue-600 text-white"
+                            : isActive
+                            ? "bg-white border-2 border-blue-600 text-blue-600"
+                            : "bg-slate-100 text-slate-400"
+                        }`}
+                      >
+                        {isDone ? <Check className="h-3 w-3" /> : <Icon className="h-3 w-3" />}
+                      </div>
+                      <span
+                        className={`text-xs leading-tight ${
+                          isActive
+                            ? "font-semibold text-slate-900"
+                            : isDone
+                            ? "text-slate-700"
+                            : "text-slate-500"
+                        }`}
+                      >
+                        {stage.name}
+                      </span>
+                    </div>
+                  </li>
+                )
+              })}
+            </ol>
+          </ConsoleCard>
+        </>
+      }
+      rightPanel={
+        <>
+          <ConsoleCard
+            icon={
+              <div className="w-7 h-7 rounded-md bg-blue-50 flex items-center justify-center">
+                <Shield className="h-4 w-4 text-blue-600" />
+              </div>
+            }
+            title="Cotización en curso"
+            badge={
+              <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded">En proceso</span>
             }
           >
-            {/* Left: vertical timeline (desktop only) */}
-            {!fullscreen && (
-              <aside className="lg:col-span-3 order-2 lg:order-1">
-                <div className="bg-white rounded-xl border shadow-sm p-5 sticky top-24">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                      <BarChart className="h-4 w-4 text-blue-600" />
-                    </div>
-                    <h3 className="font-semibold text-slate-900">Etapas del proceso</h3>
-                  </div>
-                  <ol className="space-y-1">
-                    {processStages.map((stage) => {
-                      const Icon = stage.icon
-                      const isDone = currentProcessStage > stage.id
-                      const isActive = currentProcessStage === stage.id
-                      return (
-                        <li key={stage.id} className="relative">
-                          <div
-                            className={`flex items-start gap-3 p-2 rounded-lg transition-colors ${
-                              isActive ? "bg-blue-50" : ""
-                            }`}
-                          >
-                            <div
-                              className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
-                                isDone
-                                  ? "bg-blue-600 text-white"
-                                  : isActive
-                                  ? "bg-white border-2 border-blue-600 text-blue-600"
-                                  : "bg-slate-100 text-slate-400"
-                              }`}
-                            >
-                              {isDone ? <Check className="h-3.5 w-3.5" /> : <Icon className="h-3.5 w-3.5" />}
-                            </div>
-                            <div className="min-w-0 pt-1">
-                              <div
-                                className={`text-sm leading-tight ${
-                                  isActive
-                                    ? "font-semibold text-slate-900"
-                                    : isDone
-                                    ? "text-slate-700"
-                                    : "text-slate-500"
-                                }`}
-                              >
-                                {stage.name}
-                              </div>
-                            </div>
-                          </div>
-                          {stage.id < processStages.length && (
-                            <div className="absolute left-[1.6rem] top-9 h-3 w-px bg-slate-200" />
-                          )}
-                        </li>
-                      )
-                    })}
-                  </ol>
-                </div>
-              </aside>
-            )}
+            <div className="space-y-3">
+              <FieldRow label="Vehículo" value="Toyota Corolla 2023" />
+              <FieldRow label="Plan recomendado" value="Estándar Personalizado" />
+              <FieldRow label="Cobertura" value="RC + Robo + Daños" />
+              <FieldRow label="Prima estimada" value="$41.300 / mes" />
+            </div>
+          </ConsoleCard>
 
-            {/* Center: phone-frame chat */}
-            <div
-              className={
-                fullscreen ? "w-full" : "lg:col-span-6 order-1 lg:order-2"
-              }
-            >
-              {!fullscreen && (
-                <div className="lg:hidden mb-4">
-                  <ProcessRoadmap stages={processStages} currentStage={currentProcessStage} />
-                </div>
-              )}
-              <div className="bg-white rounded-3xl shadow-xl overflow-hidden mx-auto border-[10px] border-slate-900 relative max-w-md">
-                {/* Notch */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-5 bg-slate-900 rounded-b-2xl z-10" />
+          <ConsoleCard
+            icon={
+              <div className="w-7 h-7 rounded-md bg-emerald-50 flex items-center justify-center">
+                <Sparkles className="h-4 w-4 text-emerald-600" />
+              </div>
+            }
+            title="Recommended Next Best Action"
+          >
+            <div className="space-y-3">
+              <NextAction
+                title="Ofrecer Asistencia 24/7"
+                description="El cliente valora respuesta inmediata. Upgrade a Premium agrega asistencia ilimitada."
+                cta="Enviar recomendación"
+              />
+              <NextAction
+                title="Promover Auto de Reemplazo"
+                description="Funcionalidad valorada en demos previas. Compatible con plan actual."
+                cta="Ver beneficios"
+              />
+            </div>
+          </ConsoleCard>
 
-                <div className="bg-gradient-to-br from-blue-700 to-blue-900 text-white p-4 pt-7">
-                  <div className="flex items-center">
-                    <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 bg-white mr-3 flex items-center justify-center ring-2 ring-blue-300/40">
-                      <img
-                        src={avatars.bot || asset("/placeholder.svg")}
-                        alt="AgentForce"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <h2 className="text-base font-semibold leading-tight">AgentForce</h2>
-                      <p className="text-xs text-blue-100 truncate">Contratación de Seguros</p>
-                    </div>
-                    <span className="ml-auto text-[10px] uppercase tracking-wider text-blue-200/80 bg-white/10 rounded-full px-2 py-1">
-                      En vivo
-                    </span>
+          <ConsoleCard
+            icon={
+              <div className="w-7 h-7 rounded-md bg-violet-50 flex items-center justify-center">
+                <Activity className="h-4 w-4 text-violet-600" />
+              </div>
+            }
+            title="Etapa actual"
+          >
+            <div className="space-y-3">
+              <FieldRow label="Stage" value={currentStageName} />
+              <div>
+                <div className="text-slate-500 text-xs mb-1">Progreso</div>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-blue-600 transition-all duration-300"
+                      style={{ width: `${progress}%` }}
+                    />
                   </div>
-                </div>
-
-                <div className="p-3 md:p-4">
-                  <div className="bg-gray-50 rounded-lg p-3 md:p-4 h-[400px] md:h-[500px] lg:h-[600px] overflow-y-auto">
-                    <div className="space-y-2">
-                      {messages.map(
-                        (msg, index) =>
-                          msg.visible && (
-                            <div key={index}>
-                              <MessageRenderer
-                                message={msg}
-                                avatars={avatars}
-                                renderSignaturePanel={
-                                  msg.showSignaturePanel && !msg.typing
-                                    ? () => (
-                                        <SignaturePanel
-                                          signatureComplete={signatureComplete}
-                                          completeSignature={completeSignature}
-                                        />
-                                      )
-                                    : undefined
-                                }
-                                renderIdentityPanel={
-                                  msg.showIdentityPanel && !msg.typing
-                                    ? () => (
-                                        <IdentityPanel
-                                          faceScanComplete={faceScanComplete}
-                                          scanProgress={scanProgress}
-                                          faceDetected={faceDetected}
-                                          startFaceScan={startFaceScan}
-                                          completeIdentity={completeIdentity}
-                                        />
-                                      )
-                                    : undefined
-                                }
-                              />
-                            </div>
-                          ),
-                      )}
-                      <div ref={messagesEndRef} />
-                    </div>
-                  </div>
-
-                  {/* Barra inferior de control de celular */}
-                  <div className="h-6 mt-2 flex justify-center">
-                    <div className="w-1/3 h-1 bg-slate-300 rounded-full" />
-                  </div>
+                  <span className="text-xs font-medium text-slate-700 tabular-nums">{Math.round(progress)}%</span>
                 </div>
               </div>
             </div>
+          </ConsoleCard>
+        </>
+      }
+    >
+      <ChatPanel assistantTitle="Agentforce Insurance Assistant">
+        {messages.map(
+          (msg, index) =>
+            msg.visible && (
+              <MessageRenderer
+                key={index}
+                message={msg}
+                avatars={avatars}
+                renderSignaturePanel={
+                  msg.showSignaturePanel && !msg.typing
+                    ? () => (
+                        <SignaturePanel
+                          signatureComplete={signatureComplete}
+                          completeSignature={completeSignature}
+                        />
+                      )
+                    : undefined
+                }
+                renderIdentityPanel={
+                  msg.showIdentityPanel && !msg.typing
+                    ? () => (
+                        <IdentityPanel
+                          faceScanComplete={faceScanComplete}
+                          scanProgress={scanProgress}
+                          faceDetected={faceDetected}
+                          startFaceScan={startFaceScan}
+                          completeIdentity={completeIdentity}
+                        />
+                      )
+                    : undefined
+                }
+              />
+            ),
+        )}
+        <div ref={messagesEndRef} />
+      </ChatPanel>
+    </ConsoleShell>
+  )
+}
 
-            {/* Right: info panel (desktop only) */}
-            {!fullscreen && (
-              <aside className="lg:col-span-3 order-3">
-                <div className="bg-white rounded-xl border shadow-sm overflow-hidden sticky top-24">
-                  <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-700" />
-                  <div className="p-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
-                        <Shield className="h-5 w-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <div className="text-xs uppercase tracking-wider text-slate-500">Industria</div>
-                        <div className="font-semibold text-slate-900 leading-tight">Seguros</div>
-                      </div>
-                    </div>
-                    <p className="text-sm text-slate-600 leading-relaxed mb-4">
-                      Demo end-to-end del proceso de contratación: identificación biométrica, recomendación
-                      personalizada por IA, comparación de coberturas y firma digital.
-                    </p>
-                    <div className="border-t pt-4 space-y-3">
-                      <div>
-                        <div className="text-xs uppercase tracking-wider text-slate-500 mb-1">Etapa actual</div>
-                        <div className="text-sm font-medium text-slate-900">{currentStageName}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs uppercase tracking-wider text-slate-500 mb-1">Progreso</div>
-                        <div className="flex items-center gap-2">
-                          <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-blue-600 transition-all duration-300"
-                              style={{ width: `${progress}%` }}
-                            />
-                          </div>
-                          <span className="text-xs font-medium text-slate-700 tabular-nums">
-                            {Math.round(progress)}%
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-slate-500">
-                        <Gauge className="h-3.5 w-3.5" />
-                        <span>Velocidad {playbackSpeed}x</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </aside>
-            )}
-          </div>
-        </div>
+function Row({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex items-center justify-between text-sm">
+      <span className="text-slate-500">{label}</span>
+      <span className="text-slate-900 font-medium">{value}</span>
+    </div>
+  )
+}
+
+function NextAction({ title, description, cta }: { title: string; description: string; cta: string }) {
+  return (
+    <div className="border rounded-md p-3">
+      <div className="flex items-start gap-2 mb-2">
+        <div className="text-sm font-semibold text-blue-700 leading-tight">{title}</div>
       </div>
-
-      {/* Controles mínimos en pantalla completa */}
-      <MinimalControls
-        playing={playing}
-        togglePlay={togglePlay}
-        toggleFullscreen={toggleFullscreen}
-        visible={fullscreen && showMinimalControls}
-        playbackSpeed={playbackSpeed}
-        onSpeedChange={handleSpeedChange}
-      />
-
-      {/* Temporizador flotante - Solo visible cuando no está en pantalla completa */}
-      {autoPlay && !fullscreen && <StepTimer seconds={stepTimer} />}
-
-      {/* Mobile-only floating speed control */}
-      {!fullscreen && !autoPlay && (
-        <div className="fixed bottom-4 right-4 z-20 lg:hidden">
-          <SpeedControl currentSpeed={playbackSpeed} onSpeedChange={handleSpeedChange} className="shadow-lg" />
-        </div>
-      )}
+      <p className="text-xs text-slate-600 leading-relaxed mb-2.5">{description}</p>
+      <button className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium">
+        {cta}
+        <ChevronRight className="h-3 w-3" />
+      </button>
     </div>
   )
 }
