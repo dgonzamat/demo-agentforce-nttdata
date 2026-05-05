@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
+import Link from "next/link"
 import {
   Play,
   Pause,
@@ -12,9 +13,13 @@ import {
   FileSignature,
   CheckCircle,
   Maximize,
+  Minimize,
   Shield,
   Umbrella,
   Heart,
+  ChevronLeft,
+  Download,
+  Gauge,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useConversationPlayer } from "@/hooks/use-conversation-player"
@@ -254,121 +259,180 @@ export default function SegurosDemo() {
     [changePlaybackSpeed],
   )
 
-  // Indicador de velocidad para depuración
-  const speedIndicator = (
-    <div className="fixed top-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded-full z-50">
-      Velocidad: {playbackSpeed}x
-    </div>
-  )
+  const currentStageName = processStages.find((s) => s.id === currentProcessStage)?.name || ""
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f0f4f8]" ref={containerRef}>
-      {/* Indicador de velocidad para depuración */}
-      {speedIndicator}
-
-      {/* Header - Solo visible cuando no está en pantalla completa */}
+    <div className="flex flex-col min-h-screen bg-slate-50" ref={containerRef}>
+      {/* Header */}
       {!fullscreen && (
-        <header className="bg-white border-b py-2 px-4 flex items-center justify-between sticky top-0 z-10">
-          <div className="flex items-center">
-            <div className="bg-blue-900 px-2 py-1 rounded">
-              <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 md:h-8 mr-4 filter brightness-0 invert" />
+        <header className="bg-white border-b sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-white/90">
+          <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <Link href="/" className="text-slate-500 hover:text-slate-900 flex items-center gap-1 text-sm shrink-0">
+                <ChevronLeft className="h-4 w-4" />
+                <span className="hidden sm:inline">Inicio</span>
+              </Link>
+              <div className="h-6 w-px bg-slate-200" />
+              <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 shrink-0" />
+              <span className="text-slate-300 hidden md:inline">|</span>
+              <div className="hidden md:flex items-center gap-2 min-w-0">
+                <div className="w-7 h-7 rounded-md bg-blue-50 flex items-center justify-center shrink-0">
+                  <Shield className="h-4 w-4 text-blue-600" />
+                </div>
+                <span className="font-medium truncate">Seguros · Contratación</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <SpeedControl currentSpeed={playbackSpeed} onSpeedChange={handleSpeedChange} className="hidden lg:flex" />
+              <Button
+                variant={playing ? "destructive" : "default"}
+                size="sm"
+                onClick={togglePlay}
+                className="flex items-center"
+              >
+                {playing ? <Pause className="mr-1.5 h-4 w-4" /> : <Play className="mr-1.5 h-4 w-4" />}
+                <span className="hidden sm:inline">
+                  {playing ? "Pausar" : progress === 100 ? "Reiniciar" : "Reproducir"}
+                </span>
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleReset} className="hidden sm:flex">
+                <RefreshCw className="mr-1.5 h-4 w-4" />
+                Reiniciar
+              </Button>
+              <Button variant="outline" size="sm" onClick={toggleFullscreen} className="hidden md:flex">
+                <Maximize className="mr-1.5 h-4 w-4" />
+                Pantalla completa
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => downloadDemo(containerRef)}
+                className="hidden lg:flex text-slate-600"
+                title="Descargar para LinkedIn"
+              >
+                <Download className="h-4 w-4" />
+              </Button>
             </div>
           </div>
-          <div className="flex space-x-2 md:space-x-4">
-            <SpeedControl currentSpeed={playbackSpeed} onSpeedChange={handleSpeedChange} className="hidden sm:flex" />
-            <Button
-              variant={playing ? "destructive" : "default"}
-              onClick={togglePlay}
-              className="flex items-center text-xs md:text-sm"
-            >
-              {playing ? (
-                <Pause className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-              ) : (
-                <Play className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-              )}
-              {playing ? "Pausar" : progress === 100 ? "Reiniciar" : "Reproducir"}
-            </Button>
-            <Button variant="outline" onClick={handleReset} className="flex items-center text-xs md:text-sm">
-              <RefreshCw className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-              Reiniciar
-            </Button>
-            <Button variant="outline" onClick={toggleFullscreen} className="flex items-center text-xs md:text-sm">
-              <Maximize className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-              <span className="hidden sm:inline">Pantalla Completa</span>
-            </Button>
-            <Button
-              variant="default"
-              onClick={() => downloadDemo(containerRef)}
-              className="flex items-center text-xs md:text-sm bg-green-600 hover:bg-green-700"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span className="hidden sm:inline">Descargar para LinkedIn</span>
-              <span className="sm:hidden">Descargar</span>
-            </Button>
+          <div className="h-1 bg-slate-100">
+            <div
+              className="h-full bg-gradient-to-r from-blue-500 to-blue-700 transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
           </div>
         </header>
       )}
 
-      <div className={`flex-1 py-4 px-3 md:py-6 md:px-4 relative ${fullscreen ? "bg-black" : ""}`}>
-        {/* Barra de progreso - Solo visible cuando no está en pantalla completa */}
-        {!fullscreen && (
-          <div className="max-w-5xl mx-auto mb-4 bg-white rounded-full h-2.5 overflow-hidden">
-            <div
-              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-        )}
+      <div className={`flex-1 ${fullscreen ? "bg-black p-0" : "py-6 md:py-8"}`}>
+        <div
+          className={
+            fullscreen
+              ? "flex flex-col h-full justify-center items-center px-4 max-w-5xl mx-auto w-full"
+              : "container mx-auto px-4"
+          }
+        >
+          {fullscreen && (
+            <div className="w-full mb-4">
+              <ProcessRoadmap stages={processStages} currentStage={currentProcessStage} />
+            </div>
+          )}
 
-        <div className={`max-w-6xl mx-auto ${fullscreen ? "flex flex-col h-full justify-center items-center" : ""}`}>
-          {/* Roadmap de etapas (versión compacta) - Siempre visible */}
-          <div className={`${fullscreen ? "w-full max-w-4xl mb-4" : ""}`}>
-            <ProcessRoadmap stages={processStages} currentStage={currentProcessStage} />
-          </div>
-
-          <div className={`grid grid-cols-1 md:grid-cols-7 gap-4 ${fullscreen ? "w-full max-w-4xl" : ""}`}>
-            {/* Espacio lateral */}
-            {!fullscreen && <div className="md:col-span-1">{/* Contenido opcional */}</div>}
-
-            {/* Chat principal (ahora más grande) */}
-            <div className={`${fullscreen ? "md:col-span-7" : "md:col-span-5"}`}>
-              <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6 border-8 border-gray-800 rounded-3xl relative">
-                {/* Notch de celular */}
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1/4 h-6 bg-gray-800 rounded-b-lg z-10"></div>
-
-                {/* Rediseño del header para que el título esté más abajo */}
-                <div className="bg-blue-900 text-white p-3 md:p-4">
-                  <div className="flex justify-end mb-4">
-                    <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 md:h-8 filter brightness-0 invert" />
+          <div
+            className={
+              fullscreen
+                ? "w-full max-w-2xl"
+                : "grid grid-cols-1 lg:grid-cols-12 gap-6"
+            }
+          >
+            {/* Left: vertical timeline (desktop only) */}
+            {!fullscreen && (
+              <aside className="lg:col-span-3 order-2 lg:order-1">
+                <div className="bg-white rounded-xl border shadow-sm p-5 sticky top-24">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                      <BarChart className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <h3 className="font-semibold text-slate-900">Etapas del proceso</h3>
                   </div>
+                  <ol className="space-y-1">
+                    {processStages.map((stage) => {
+                      const Icon = stage.icon
+                      const isDone = currentProcessStage > stage.id
+                      const isActive = currentProcessStage === stage.id
+                      return (
+                        <li key={stage.id} className="relative">
+                          <div
+                            className={`flex items-start gap-3 p-2 rounded-lg transition-colors ${
+                              isActive ? "bg-blue-50" : ""
+                            }`}
+                          >
+                            <div
+                              className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
+                                isDone
+                                  ? "bg-blue-600 text-white"
+                                  : isActive
+                                  ? "bg-white border-2 border-blue-600 text-blue-600"
+                                  : "bg-slate-100 text-slate-400"
+                              }`}
+                            >
+                              {isDone ? <Check className="h-3.5 w-3.5" /> : <Icon className="h-3.5 w-3.5" />}
+                            </div>
+                            <div className="min-w-0 pt-1">
+                              <div
+                                className={`text-sm leading-tight ${
+                                  isActive
+                                    ? "font-semibold text-slate-900"
+                                    : isDone
+                                    ? "text-slate-700"
+                                    : "text-slate-500"
+                                }`}
+                              >
+                                {stage.name}
+                              </div>
+                            </div>
+                          </div>
+                          {stage.id < processStages.length && (
+                            <div className="absolute left-[1.6rem] top-9 h-3 w-px bg-slate-200" />
+                          )}
+                        </li>
+                      )
+                    })}
+                  </ol>
+                </div>
+              </aside>
+            )}
 
-                  <div className="flex items-center mt-4">
-                    <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-white mr-3 flex items-center justify-center">
+            {/* Center: phone-frame chat */}
+            <div
+              className={
+                fullscreen ? "w-full" : "lg:col-span-6 order-1 lg:order-2"
+              }
+            >
+              {!fullscreen && (
+                <div className="lg:hidden mb-4">
+                  <ProcessRoadmap stages={processStages} currentStage={currentProcessStage} />
+                </div>
+              )}
+              <div className="bg-white rounded-3xl shadow-xl overflow-hidden mx-auto border-[10px] border-slate-900 relative max-w-md">
+                {/* Notch */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-5 bg-slate-900 rounded-b-2xl z-10" />
+
+                <div className="bg-gradient-to-br from-blue-700 to-blue-900 text-white p-4 pt-7">
+                  <div className="flex items-center">
+                    <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 bg-white mr-3 flex items-center justify-center ring-2 ring-blue-300/40">
                       <img
-                        src={avatars.bot || "/placeholder.svg"}
+                        src={avatars.bot || asset("/placeholder.svg")}
                         alt="AgentForce"
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div>
-                      <h2 className="text-lg md:text-xl font-semibold">AgentForce</h2>
-                      <p className="text-xs md:text-sm text-blue-100">Proceso de Contratación de Seguros</p>
+                    <div className="min-w-0">
+                      <h2 className="text-base font-semibold leading-tight">AgentForce</h2>
+                      <p className="text-xs text-blue-100 truncate">Contratación de Seguros</p>
                     </div>
+                    <span className="ml-auto text-[10px] uppercase tracking-wider text-blue-200/80 bg-white/10 rounded-full px-2 py-1">
+                      En vivo
+                    </span>
                   </div>
                 </div>
 
@@ -415,14 +479,59 @@ export default function SegurosDemo() {
 
                   {/* Barra inferior de control de celular */}
                   <div className="h-6 mt-2 flex justify-center">
-                    <div className="w-1/3 h-1 bg-gray-300 rounded-full"></div>
+                    <div className="w-1/3 h-1 bg-slate-300 rounded-full" />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Espacio lateral */}
-            {!fullscreen && <div className="md:col-span-1">{/* Contenido opcional */}</div>}
+            {/* Right: info panel (desktop only) */}
+            {!fullscreen && (
+              <aside className="lg:col-span-3 order-3">
+                <div className="bg-white rounded-xl border shadow-sm overflow-hidden sticky top-24">
+                  <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-700" />
+                  <div className="p-5">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <Shield className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <div className="text-xs uppercase tracking-wider text-slate-500">Industria</div>
+                        <div className="font-semibold text-slate-900 leading-tight">Seguros</div>
+                      </div>
+                    </div>
+                    <p className="text-sm text-slate-600 leading-relaxed mb-4">
+                      Demo end-to-end del proceso de contratación: identificación biométrica, recomendación
+                      personalizada por IA, comparación de coberturas y firma digital.
+                    </p>
+                    <div className="border-t pt-4 space-y-3">
+                      <div>
+                        <div className="text-xs uppercase tracking-wider text-slate-500 mb-1">Etapa actual</div>
+                        <div className="text-sm font-medium text-slate-900">{currentStageName}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs uppercase tracking-wider text-slate-500 mb-1">Progreso</div>
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-blue-600 transition-all duration-300"
+                              style={{ width: `${progress}%` }}
+                            />
+                          </div>
+                          <span className="text-xs font-medium text-slate-700 tabular-nums">
+                            {Math.round(progress)}%
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-slate-500">
+                        <Gauge className="h-3.5 w-3.5" />
+                        <span>Velocidad {playbackSpeed}x</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </aside>
+            )}
           </div>
         </div>
       </div>
@@ -440,50 +549,11 @@ export default function SegurosDemo() {
       {/* Temporizador flotante - Solo visible cuando no está en pantalla completa */}
       {autoPlay && !fullscreen && <StepTimer seconds={stepTimer} />}
 
-      {/* Botones flotantes - Solo visibles cuando no está en pantalla completa */}
+      {/* Mobile-only floating speed control */}
       {!fullscreen && !autoPlay && (
-        <>
-          {/* Botón de pantalla completa */}
-          <div className="fixed bottom-4 left-4 z-20">
-            <Button
-              variant="default"
-              onClick={toggleFullscreen}
-              className="rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
-            >
-              <Maximize className="h-5 w-5" />
-            </Button>
-          </div>
-
-          {/* Control de velocidad flotante para móviles */}
-          <div className="fixed bottom-4 left-20 z-20 sm:hidden">
-            <SpeedControl currentSpeed={playbackSpeed} onSpeedChange={handleSpeedChange} className="shadow-lg" />
-          </div>
-
-          {/* Botón de descarga */}
-          <div className="fixed bottom-4 right-4 z-20">
-            <Button
-              variant="default"
-              onClick={() => downloadDemo(containerRef)}
-              className="rounded-full w-12 h-12 flex items-center justify-center shadow-lg bg-green-600 hover:bg-green-700"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-            </Button>
-          </div>
-        </>
+        <div className="fixed bottom-4 right-4 z-20 lg:hidden">
+          <SpeedControl currentSpeed={playbackSpeed} onSpeedChange={handleSpeedChange} className="shadow-lg" />
+        </div>
       )}
     </div>
   )

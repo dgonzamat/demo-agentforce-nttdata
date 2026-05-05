@@ -1,163 +1,275 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Shield, Building2, Phone, ShoppingBag, Plane, HardHat, Zap, ArrowRight } from "lucide-react"
+import {
+  Shield,
+  Building2,
+  Phone,
+  ShoppingBag,
+  Plane,
+  HardHat,
+  Zap,
+  ArrowRight,
+  Sparkles,
+  Layers,
+  Cpu,
+} from "lucide-react"
 import { asset } from "@/lib/asset"
 
+type Category = "all" | "financieros" | "servicios" | "industriales"
+
+interface Industry {
+  id: string
+  name: string
+  description: string
+  href: string
+  icon: typeof Shield
+  category: Exclude<Category, "all">
+  gradient: string
+  iconBg: string
+  iconColor: string
+  isNew?: boolean
+}
+
+const industries: Industry[] = [
+  {
+    id: "seguros",
+    name: "Seguros",
+    description: "Cotización, emisión y gestión de pólizas con IA generativa.",
+    href: "/seguros/demo",
+    icon: Shield,
+    category: "financieros",
+    gradient: "from-blue-500 to-blue-700",
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-600",
+  },
+  {
+    id: "banca",
+    name: "Banca",
+    description: "Onboarding biométrico, créditos y servicios financieros.",
+    href: "/banking/demo",
+    icon: Building2,
+    category: "financieros",
+    gradient: "from-indigo-500 to-indigo-700",
+    iconBg: "bg-indigo-50",
+    iconColor: "text-indigo-600",
+  },
+  {
+    id: "telecom",
+    name: "Telecomunicaciones",
+    description: "Atención al cliente, soporte técnico y gestión de planes.",
+    href: "/telecom/demo",
+    icon: Phone,
+    category: "servicios",
+    gradient: "from-violet-500 to-purple-700",
+    iconBg: "bg-violet-50",
+    iconColor: "text-violet-600",
+    isNew: true,
+  },
+  {
+    id: "retail",
+    name: "Retail",
+    description: "Asistencia en ventas, negociación B2B y gestión de inventario.",
+    href: "/retail/demo",
+    icon: ShoppingBag,
+    category: "servicios",
+    gradient: "from-pink-500 to-rose-700",
+    iconBg: "bg-pink-50",
+    iconColor: "text-pink-600",
+  },
+  {
+    id: "airline",
+    name: "Aerolíneas",
+    description: "Reservas, gestión de cambios y experiencia del pasajero.",
+    href: "/airline/demo",
+    icon: Plane,
+    category: "industriales",
+    gradient: "from-cyan-500 to-sky-700",
+    iconBg: "bg-cyan-50",
+    iconColor: "text-cyan-600",
+  },
+  {
+    id: "mineria",
+    name: "Minería",
+    description: "Gestión de contratistas y cumplimiento normativo.",
+    href: "/mineria/demo",
+    icon: HardHat,
+    category: "industriales",
+    gradient: "from-amber-500 to-orange-700",
+    iconBg: "bg-amber-50",
+    iconColor: "text-amber-700",
+  },
+  {
+    id: "servicios-basicos",
+    name: "Servicios Básicos",
+    description: "Atención al cliente, lectura de consumo y facturación.",
+    href: "/servicios-basicos/demo",
+    icon: Zap,
+    category: "servicios",
+    gradient: "from-emerald-500 to-teal-700",
+    iconBg: "bg-emerald-50",
+    iconColor: "text-emerald-600",
+  },
+]
+
+const categories: { id: Category; label: string }[] = [
+  { id: "all", label: "Todos" },
+  { id: "financieros", label: "Financieros" },
+  { id: "servicios", label: "Servicios" },
+  { id: "industriales", label: "Industriales" },
+]
+
 export default function HomePage() {
+  const [filter, setFilter] = useState<Category>("all")
+
+  const visible = filter === "all" ? industries : industries.filter((i) => i.category === filter)
+
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      {/* Header */}
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-3 flex items-center">
-          <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-8 mr-4" />
-          <span className="text-xl font-semibold">AgentForce</span>
+    <div className="flex flex-col min-h-screen bg-slate-50">
+      <header className="border-b bg-white sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-7" />
+            <span className="text-slate-300">|</span>
+            <span className="text-lg font-semibold tracking-tight">AgentForce</span>
+          </div>
+          <Link href="/modules">
+            <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
+              <Layers className="h-4 w-4 mr-2" />
+              Catálogo de módulos
+            </Button>
+          </Link>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-grow container mx-auto px-4 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold mb-4">Demos por Industria</h1>
-          <p className="text-gray-600">Seleccione una industria para explorar la demo correspondiente</p>
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(99,102,241,0.3),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(59,130,246,0.25),transparent_50%)]" />
+        <div className="container mx-auto px-4 py-16 md:py-24 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-3xl"
+          >
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm mb-6 backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5 text-blue-200" />
+              <span className="text-blue-100">IA generativa aplicada al negocio</span>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 leading-[1.1]">
+              Demos de AgentForce
+              <br />
+              <span className="bg-gradient-to-r from-blue-200 to-cyan-200 bg-clip-text text-transparent">
+                por industria
+              </span>
+            </h1>
+            <p className="text-lg md:text-xl text-blue-100/90 max-w-2xl leading-relaxed">
+              Conversaciones reales con un agente de IA en 7 sectores. Verificación biométrica, firma digital y procesos
+              end-to-end ─ adaptados al mercado chileno.
+            </p>
+            <div className="flex flex-wrap gap-6 mt-10 text-sm">
+              <Stat value="7" label="Industrias" />
+              <Divider />
+              <Stat value="28+" label="Módulos" />
+              <Divider />
+              <Stat value="100%" label="Cumplimiento normativo" />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <main className="flex-grow container mx-auto px-4 py-12 md:py-16">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Selecciona una industria</h2>
+            <p className="text-slate-600 mt-1">Cada demo simula una conversación end-to-end con el agente.</p>
+          </div>
+          <div className="inline-flex rounded-lg bg-white border shadow-sm p-1 self-start md:self-auto">
+            {categories.map((c) => (
+              <button
+                key={c.id}
+                onClick={() => setFilter(c.id)}
+                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                  filter === c.id ? "bg-slate-900 text-white shadow-sm" : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex rounded-md bg-gray-100 p-1">
-            <button className="px-4 py-2 rounded-md bg-white shadow-sm font-medium">Todos</button>
-            <button className="px-4 py-2 rounded-md text-gray-700 font-medium">Financieros</button>
-            <button className="px-4 py-2 rounded-md text-gray-700 font-medium">Servicios</button>
-            <button className="px-4 py-2 rounded-md text-gray-700 font-medium">Industriales</button>
-          </div>
-        </div>
-
-        {/* Industry Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {/* Seguros */}
-          <div className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3">
-                <Shield className="h-5 w-5 text-blue-600" />
-              </div>
-              <h2 className="text-xl font-semibold">Seguros</h2>
-            </div>
-            <p className="text-gray-600 mb-4 h-16">Cotización, emisión y gestión de pólizas con IA.</p>
-            <Link href="/seguros/demo" passHref>
-              <Button variant="outline" className="w-full justify-between">
-                Ver Demo
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
-
-          {/* Banca */}
-          <div className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3">
-                <Building2 className="h-5 w-5 text-blue-600" />
-              </div>
-              <h2 className="text-xl font-semibold">Banca</h2>
-            </div>
-            <p className="text-gray-600 mb-4 h-16">Onboarding, préstamos y servicios financieros.</p>
-            <Link href="/banking/demo" passHref>
-              <Button variant="outline" className="w-full justify-between">
-                Ver Demo
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
-
-          {/* Telecomunicaciones */}
-          <div className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3">
-                <Phone className="h-5 w-5 text-blue-600" />
-              </div>
-              <div className="flex items-center">
-                <h2 className="text-xl font-semibold mr-2">Telecomunicaciones</h2>
-                <span className="bg-green-500 text-white text-xs px-2 py-1 rounded">Nuevo</span>
-              </div>
-            </div>
-            <p className="text-gray-600 mb-4 h-16">Atención al cliente, soporte técnico y ventas.</p>
-            <Link href="/telecom/demo" passHref>
-              <Button variant="outline" className="w-full justify-between">
-                Ver Demo
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
-
-          {/* Retail */}
-          <div className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3">
-                <ShoppingBag className="h-5 w-5 text-blue-600" />
-              </div>
-              <h2 className="text-xl font-semibold">Retail</h2>
-            </div>
-            <p className="text-gray-600 mb-4 h-16">Asistencia en ventas y gestión de inventario.</p>
-            <Link href="/retail/demo" passHref>
-              <Button variant="outline" className="w-full justify-between">
-                Ver Demo
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
-
-          {/* Aerolíneas */}
-          <div className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3">
-                <Plane className="h-5 w-5 text-blue-600" />
-              </div>
-              <h2 className="text-xl font-semibold">Aerolíneas</h2>
-            </div>
-            <p className="text-gray-600 mb-4 h-16">Reservas, gestión de viajes y atención al pasajero.</p>
-            <Link href="/airline/demo" passHref>
-              <Button variant="outline" className="w-full justify-between">
-                Ver Demo
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
-
-          {/* Minería */}
-          <div className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3">
-                <HardHat className="h-5 w-5 text-blue-600" />
-              </div>
-              <h2 className="text-xl font-semibold">Minería</h2>
-            </div>
-            <p className="text-gray-600 mb-4 h-16">Gestión de contratistas y cumplimiento normativo.</p>
-            <Link href="/mineria/demo" passHref>
-              <Button variant="outline" className="w-full justify-between">
-                Ver Demo
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
-
-          {/* Servicios Básicos */}
-          <div className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3">
-                <Zap className="h-5 w-5 text-blue-600" />
-              </div>
-              <h2 className="text-xl font-semibold">Servicios Básicos</h2>
-            </div>
-            <p className="text-gray-600 mb-4 h-16">Atención al cliente y gestión de consumo.</p>
-            <Link href="/servicios-basicos/demo" passHref>
-              <Button variant="outline" className="w-full justify-between">
-                Ver Demo
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
-        </div>
+        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {visible.map((industry, idx) => (
+            <IndustryCard key={industry.id} industry={industry} index={idx} />
+          ))}
+        </motion.div>
       </main>
+
+      <footer className="border-t bg-white mt-12">
+        <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+          <div className="flex items-center gap-3">
+            <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-5 opacity-70" />
+            <span>© {new Date().getFullYear()} NTT DATA Chile. Soluciones AgentForce.</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Cpu className="h-4 w-4" />
+            <span>Construido para el mercado chileno</span>
+          </div>
+        </div>
+      </footer>
     </div>
+  )
+}
+
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <div>
+      <div className="text-2xl md:text-3xl font-bold">{value}</div>
+      <div className="text-blue-200/80 text-xs uppercase tracking-wider mt-1">{label}</div>
+    </div>
+  )
+}
+
+function Divider() {
+  return <div className="w-px h-12 bg-white/20 self-center" />
+}
+
+function IndustryCard({ industry, index }: { industry: Industry; index: number }) {
+  const Icon = industry.icon
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, delay: index * 0.04 }}
+    >
+      <Link href={industry.href} className="group block h-full">
+        <div className="h-full bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+          <div className={`h-1 bg-gradient-to-r ${industry.gradient}`} />
+          <div className="p-6 flex flex-col h-[calc(100%-0.25rem)]">
+            <div className="flex items-start justify-between mb-4">
+              <div className={`w-11 h-11 rounded-lg ${industry.iconBg} flex items-center justify-center`}>
+                <Icon className={`h-5 w-5 ${industry.iconColor}`} />
+              </div>
+              {industry.isNew && (
+                <span className="bg-emerald-100 text-emerald-700 text-xs font-medium px-2 py-1 rounded-full">
+                  Nuevo
+                </span>
+              )}
+            </div>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">{industry.name}</h3>
+            <p className="text-sm text-slate-600 leading-relaxed flex-grow mb-5">{industry.description}</p>
+            <div className="flex items-center text-sm font-medium text-slate-700 group-hover:text-slate-900 group-hover:gap-2 gap-1 transition-all">
+              Ver demo
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </div>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
   )
 }
