@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Shield, Building2, Phone, ShoppingBag, Plane, HardHat, Zap, ArrowRight } from "lucide-react"
+import { asset } from "@/lib/asset"
 
 export default function HomePage() {
   return (
@@ -10,7 +11,7 @@ export default function HomePage() {
       {/* Header */}
       <header className="border-b">
         <div className="container mx-auto px-4 py-3 flex items-center">
-          <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-8 mr-4" />
+          <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-8 mr-4" />
           <span className="text-xl font-semibold">AgentForce</span>
         </div>
       </header>

@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { asset } from "@/lib/asset"
 
 export const metadata: Metadata = {
   title: "AgentForce - Módulos de Demostración",
@@ -24,7 +25,7 @@ export default function ModulesLayout({
           </Button>
         </Link>
         <div className="bg-blue-900 px-2 py-1 rounded mr-4">
-          <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-6 md:h-8 filter brightness-0 invert" />
+          <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 md:h-8 filter brightness-0 invert" />
         </div>
         <h1 className="text-lg font-semibold">Módulos de Demostración</h1>
       </header>

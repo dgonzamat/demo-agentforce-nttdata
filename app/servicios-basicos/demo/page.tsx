@@ -30,13 +30,14 @@ import { MessageRenderer } from "@/components/demo/message-renderer"
 import { downloadDemo } from "@/utils/download-demo"
 import { ConsumptionPanel } from "@/components/demo/consumption-panel"
 import { TarifaPanel } from "@/components/demo/tarifa-panel"
+import { asset } from "@/lib/asset"
 
 export default function ServiciosBasicosDemo() {
   // Define avatars for the conversation
   const avatars = {
-    bot: "/avatar-agentforce.png",
-    client: "/avatar-user.png",
-    utility: "/utility-icon.png",
+    bot: asset("/avatar-agentforce.png"),
+    client: asset("/avatar-user.png"),
+    utility: asset("/utility-icon.png"),
   }
 
   // Define the stages of the utility service process
@@ -263,7 +264,7 @@ export default function ServiciosBasicosDemo() {
         <header className="bg-white border-b py-2 px-4 flex items-center justify-between sticky top-0 z-10">
           <div className="flex items-center">
             <div className="bg-blue-900 px-2 py-1 rounded">
-              <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-6 md:h-8 mr-4 filter brightness-0 invert" />
+              <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 md:h-8 mr-4 filter brightness-0 invert" />
             </div>
           </div>
           <div className="flex space-x-2 md:space-x-4">
@@ -345,7 +346,7 @@ export default function ServiciosBasicosDemo() {
                 {/* Header redesign */}
                 <div className="bg-blue-900 text-white p-3 md:p-4">
                   <div className="flex justify-end mb-4">
-                    <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-6 md:h-8 filter brightness-0 invert" />
+                    <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 md:h-8 filter brightness-0 invert" />
                   </div>
 
                   <div className="flex items-center mt-4">

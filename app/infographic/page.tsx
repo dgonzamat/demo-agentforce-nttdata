@@ -19,6 +19,7 @@ import {
   Settings,
   CheckCircle,
 } from "lucide-react"
+import { asset } from "@/lib/asset"
 
 export default function InfographicPage() {
   const [activeSection, setActiveSection] = useState<string | null>(null)
@@ -104,7 +105,7 @@ export default function InfographicPage() {
             </Button>
           </Link>
           <div className="bg-blue-900 px-2 py-1 rounded mr-4">
-            <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-6 md:h-8 filter brightness-0 invert" />
+            <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 md:h-8 filter brightness-0 invert" />
           </div>
         </div>
         <div>
@@ -163,7 +164,7 @@ export default function InfographicPage() {
           <div className="bg-blue-50 p-6 md:p-8 border-b border-blue-100">
             <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-6">
               <div className="md:w-1/4 flex justify-center">
-                <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-16 md:h-20" />
+                <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-16 md:h-20" />
               </div>
               <div className="md:w-3/4">
                 <h2 className="text-xl md:text-2xl font-bold mb-3 text-blue-900">

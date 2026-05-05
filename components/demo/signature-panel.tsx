@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { AlertCircle, Check, Lock, FileText } from "lucide-react"
+import { asset } from "@/lib/asset"
 
 interface SignaturePanelProps {
   signatureComplete: boolean
@@ -54,7 +55,7 @@ export function SignaturePanel({ signatureComplete, completeSignature }: Signatu
               </div>
             </div>
             <div className="flex justify-center mb-3">
-              <img src="/firma-electronica-logo.png" alt="Firma Electrónica" className="h-12" />
+              <img src={asset("/firma-electronica-logo.png")} alt="Firma Electrónica" className="h-12" />
             </div>
             <p className="text-sm text-gray-600 mb-3">Procesando firma electrónica avanzada...</p>
             {!signatureComplete && (

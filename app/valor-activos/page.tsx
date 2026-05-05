@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Download, ChevronLeft, ArrowRight, Check, Shield, Zap, Globe, BarChart } from "lucide-react"
+import { asset } from "@/lib/asset"
 
 export default function ValorActivosPage() {
   const infographicRef = useRef<HTMLDivElement>(null)
@@ -68,7 +69,7 @@ export default function ValorActivosPage() {
               <span>Volver</span>
             </Button>
           </Link>
-          <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-6 sm:h-8" />
+          <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 sm:h-8" />
         </div>
         <Button
           onClick={downloadInfographic}
@@ -269,7 +270,7 @@ export default function ValorActivosPage() {
               {/* Footer */}
               <div className="mt-4 sm:mt-6 md:mt-8 lg:mt-10 pt-2 sm:pt-3 md:pt-4 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center">
                 <div className="flex items-center mb-2 sm:mb-0">
-                  <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-5 sm:h-6 md:h-8 mr-2 sm:mr-4" />
+                  <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-5 sm:h-6 md:h-8 mr-2 sm:mr-4" />
                   <span className="text-xs sm:text-sm text-gray-500">
                     © 2023 NTT DATA Chile. Todos los derechos reservados.
                   </span>

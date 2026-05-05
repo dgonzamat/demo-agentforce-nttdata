@@ -1,12 +1,13 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { asset } from "@/lib/asset"
 
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-[#f0f4f8] p-4">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-md p-8">
         <div className="text-center mb-8">
-          <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-12 mx-auto mb-4" />
+          <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-12 mx-auto mb-4" />
           <h1 className="text-3xl font-bold mb-2">AgentForce Demo Center</h1>
           <p className="text-gray-600">Demostraciones interactivas para diferentes sectores</p>
         </div>
