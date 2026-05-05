@@ -3,6 +3,7 @@
 import { useRef } from "react"
 import { Shield, Briefcase, TrendingUp, Zap, CheckCircle, BarChart, Download, Globe } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { asset } from "@/lib/asset"
 
 export default function SinglePageInfographic() {
   const infographicRef = useRef<HTMLDivElement>(null)
@@ -63,7 +64,7 @@ export default function SinglePageInfographic() {
             <h1 className="text-3xl font-bold">AgentForce: Transformando Industrias</h1>
             <p className="text-lg">Soluciones desarrolladas por NTT DATA para el mercado chileno</p>
           </div>
-          <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-16 filter brightness-0 invert" />
+          <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-16 filter brightness-0 invert" />
         </div>
 
         {/* Main Content Grid */}

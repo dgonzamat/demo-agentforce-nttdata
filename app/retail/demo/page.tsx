@@ -28,13 +28,14 @@ import { StepTimer } from "@/components/demo/step-timer"
 import { MinimalControls } from "@/components/demo/minimal-controls"
 import { MessageRenderer } from "@/components/demo/message-renderer"
 import { downloadDemo } from "@/utils/download-demo"
+import { asset } from "@/lib/asset"
 
 export default function RetailDemo() {
   // Definir avatares para la conversación
   const avatars = {
-    bot: "/avatar-agentforce.png",
-    client: "/avatar-user.png",
-    retail: "/retail-icon.png",
+    bot: asset("/avatar-agentforce.png"),
+    client: asset("/avatar-user.png"),
+    retail: asset("/retail-icon.png"),
   }
 
   // Definición de las etapas del proceso de negociación B2B
@@ -254,7 +255,7 @@ export default function RetailDemo() {
         <header className="bg-white border-b py-2 px-4 flex items-center justify-between sticky top-0 z-10">
           <div className="flex items-center">
             <div className="bg-blue-900 px-2 py-1 rounded">
-              <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-6 md:h-8 mr-4 filter brightness-0 invert" />
+              <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 md:h-8 mr-4 filter brightness-0 invert" />
             </div>
           </div>
           <div className="flex space-x-2 md:space-x-4">
@@ -336,7 +337,7 @@ export default function RetailDemo() {
                 {/* Rediseño del header para que el título esté más abajo */}
                 <div className="bg-blue-900 text-white p-3 md:p-4">
                   <div className="flex justify-end mb-4">
-                    <img src="/ntt-data-logo.png" alt="NTT DATA" className="h-6 md:h-8 filter brightness-0 invert" />
+                    <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 md:h-8 filter brightness-0 invert" />
                   </div>
 
                   <div className="flex items-center mt-4">
