@@ -254,9 +254,21 @@ export function useConversationPlayer({ initialMessages, onStageChange, stepDura
     }
   }, [playing, autoPlay, progress, messages, onStageChange])
 
-  // Auto-scroll al último mensaje
+  // Auto-scroll al último mensaje, sólo dentro del contenedor del chat
+  // (evita arrastrar el scroll de la página entera)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    const el = messagesEndRef.current
+    if (!el) return
+    let parent = el.parentElement
+    while (parent) {
+      const style = window.getComputedStyle(parent)
+      const overflowY = style.overflowY
+      if ((overflowY === "auto" || overflowY === "scroll") && parent.scrollHeight > parent.clientHeight) {
+        parent.scrollTo({ top: parent.scrollHeight, behavior: "smooth" })
+        return
+      }
+      parent = parent.parentElement
+    }
   }, [messages])
 
   return {

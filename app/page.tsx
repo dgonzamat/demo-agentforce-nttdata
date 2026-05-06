@@ -246,15 +246,15 @@ function Divider() {
 function SalesforceMark({ className, light = true }: { className?: string; light?: boolean }) {
   return (
     <div className={`flex items-center gap-3 ${className || ""}`}>
-      <svg viewBox="0 0 200 140" className="h-full w-auto shrink-0" aria-hidden>
+      <svg viewBox="0 0 256 180" className="h-full w-auto shrink-0" aria-hidden>
         <path
           fill="#00A1E0"
-          d="M83 32c8-9 19-14 32-14 17 0 32 10 39 24 5-2 11-3 17-3 23 0 42 19 42 42 0 8-2 16-7 23 6 5 9 13 9 21 0 16-13 29-29 29-2 0-4 0-6-1-4 13-16 22-30 22-7 0-13-2-18-5-5 12-17 21-31 21-15 0-27-9-32-22-3 1-7 1-10 1-19 0-34-15-34-33 0-12 6-22 16-28-2-5-3-10-3-15 0-21 17-37 38-37 6 0 11 1 17 4z"
+          d="M106.4 36.1c8.1-8.4 19.4-13.6 31.9-13.6 16.6 0 31.1 9.2 38.8 23 6.7-3 14.1-4.7 21.9-4.7 30.1 0 54.6 24.7 54.6 55.2 0 30.5-24.4 55.2-54.6 55.2-3.7 0-7.3-.4-10.7-1.1-6.8 12.1-19.7 20.3-34.6 20.3-6.2 0-12.1-1.4-17.4-4-6.9 16.2-23 27.6-41.7 27.6-19.5 0-36.2-12.4-42.5-29.8-2.7.6-5.6.9-8.5.9-22.4 0-40.6-18.4-40.6-41.1 0-15.2 8.2-28.5 20.5-35.6-2.5-5.8-3.9-12.2-3.9-18.9 0-26.4 21.4-47.7 47.8-47.7 15.5 0 29.3 7.4 38 18.8z"
         />
       </svg>
       <span
-        className={`text-[1.6em] font-bold tracking-tight leading-none ${light ? "text-white" : "text-slate-900"}`}
-        style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
+        className={`text-[1.6em] font-semibold tracking-tight leading-none ${light ? "text-white" : "text-slate-900"}`}
+        style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif" }}
       >
         salesforce
       </span>
