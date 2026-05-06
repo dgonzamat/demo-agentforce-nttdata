@@ -13,7 +13,6 @@ import {
   X,
   Grid3x3,
   Activity,
-  BookOpen,
   History,
   StickyNote,
   Layers,
@@ -22,8 +21,11 @@ import {
   Play,
   Pause,
   RefreshCw,
+  Maximize,
+  Minimize,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useFullscreen } from "@/hooks/use-fullscreen"
 import { asset } from "@/lib/asset"
 
 interface ConsoleShellProps {
@@ -49,8 +51,12 @@ export function ConsoleShell({
   onTogglePlay,
   onReset,
 }: ConsoleShellProps) {
+  const { fullscreen, containerRef, toggleFullscreen } = useFullscreen()
   return (
-    <div className="flex flex-col min-h-screen bg-slate-100">
+    <div
+      ref={containerRef}
+      className="flex flex-col min-h-screen lg:h-screen lg:overflow-hidden bg-slate-100"
+    >
       {/* Top dark navy bar - Salesforce + NTT DATA + Agentforce */}
       <div className="bg-[#0d2147] text-white flex items-center px-4 h-14 shrink-0">
         <Link href="/" className="flex items-center gap-3 shrink-0">
@@ -110,11 +116,23 @@ export function ConsoleShell({
         </div>
       )}
 
-      {/* Main 3-column body */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)_320px] gap-4 p-4 max-w-[1600px] w-full mx-auto">
-        <aside className="space-y-4 order-2 lg:order-1 min-w-0">{leftPanel}</aside>
-        <main className="order-1 lg:order-2 min-w-0">{children}</main>
-        <aside className="space-y-4 order-3 min-w-0">{rightPanel}</aside>
+      {/* Main body — 3-col by default, single column when fullscreen-focused */}
+      <div
+        className={`flex-1 lg:overflow-hidden grid gap-4 p-4 max-w-[1600px] w-full mx-auto ${
+          fullscreen
+            ? "grid-cols-1"
+            : "grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)_320px]"
+        }`}
+      >
+        {!fullscreen && (
+          <aside className="space-y-4 order-2 lg:order-1 min-w-0 lg:overflow-y-auto lg:pr-1">
+            {leftPanel}
+          </aside>
+        )}
+        <main className="order-1 lg:order-2 min-w-0 lg:overflow-hidden">{children}</main>
+        {!fullscreen && (
+          <aside className="space-y-4 order-3 min-w-0 lg:overflow-y-auto lg:pr-1">{rightPanel}</aside>
+        )}
       </div>
 
       {/* Bottom utility bar */}
@@ -129,27 +147,35 @@ export function ConsoleShell({
         <UtilityItem icon={Layers} label="Recent Items" />
 
         {/* Demo controls anchored right */}
-        {(onTogglePlay || onReset) && (
-          <div className="ml-auto flex items-center gap-2">
-            {onTogglePlay && (
-              <Button
-                size="sm"
-                variant={playing ? "destructive" : "default"}
-                onClick={onTogglePlay}
-                className="h-7 text-xs"
-              >
-                {playing ? <Pause className="h-3 w-3 mr-1" /> : <Play className="h-3 w-3 mr-1" />}
-                {playing ? "Pausar" : progress === 100 ? "Reiniciar" : "Reproducir"}
-              </Button>
-            )}
-            {onReset && (
-              <Button size="sm" variant="outline" onClick={onReset} className="h-7 text-xs">
-                <RefreshCw className="h-3 w-3 mr-1" />
-                Reiniciar
-              </Button>
-            )}
-          </div>
-        )}
+        <div className="ml-auto flex items-center gap-2">
+          {onTogglePlay && (
+            <Button
+              size="sm"
+              variant={playing ? "destructive" : "default"}
+              onClick={onTogglePlay}
+              className="h-7 text-xs"
+            >
+              {playing ? <Pause className="h-3 w-3 mr-1" /> : <Play className="h-3 w-3 mr-1" />}
+              {playing ? "Pausar" : progress === 100 ? "Reiniciar" : "Reproducir"}
+            </Button>
+          )}
+          {onReset && (
+            <Button size="sm" variant="outline" onClick={onReset} className="h-7 text-xs">
+              <RefreshCw className="h-3 w-3 mr-1" />
+              Reiniciar
+            </Button>
+          )}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={toggleFullscreen}
+            className="h-7 text-xs"
+            title={fullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+          >
+            {fullscreen ? <Minimize className="h-3 w-3 mr-1" /> : <Maximize className="h-3 w-3 mr-1" />}
+            {fullscreen ? "Salir" : "Pantalla completa"}
+          </Button>
+        </div>
       </div>
     </div>
   )

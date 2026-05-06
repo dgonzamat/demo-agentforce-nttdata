@@ -19,7 +19,7 @@ export function ChatPanel({
   disclaimer = "Agentforce puede cometer errores. Verifica la información importante.",
 }: ChatPanelProps) {
   return (
-    <div className="bg-white rounded-md border shadow-sm flex flex-col h-[calc(100vh-180px)] min-h-[600px] overflow-hidden">
+    <div className="bg-white rounded-md border shadow-sm flex flex-col h-[600px] lg:h-full overflow-hidden">
       {/* Chat header */}
       <header className="px-5 py-3 border-b flex items-center gap-3 shrink-0">
         <div className="w-9 h-9 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
