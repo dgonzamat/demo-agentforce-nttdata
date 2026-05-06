@@ -13,7 +13,6 @@ import {
   HardHat,
   Zap,
   ArrowRight,
-  Sparkles,
   Layers,
   Cpu,
 } from "lucide-react"
@@ -155,27 +154,38 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm mb-6 backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5 text-blue-200" />
-              <span className="text-blue-100">IA generativa aplicada al negocio</span>
+            <div className="flex items-center gap-6 md:gap-10 mb-10">
+              <img
+                src={asset("/ntt-data-logo.png")}
+                alt="NTT DATA"
+                className="h-10 md:h-14 brightness-0 invert"
+              />
+              <div className="h-10 md:h-14 w-px bg-white/30" />
+              <img
+                src={asset("/salesforce-logo.svg")}
+                alt="Salesforce"
+                className="h-12 md:h-16"
+              />
             </div>
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 leading-[1.1]">
-              Demos de AgentForce
-              <br />
+              Casos de Uso de{" "}
               <span className="bg-gradient-to-r from-blue-200 to-cyan-200 bg-clip-text text-transparent">
-                por industria
+                Agentforce
               </span>
+              <br />
+              por Industria
             </h1>
             <p className="text-lg md:text-xl text-blue-100/90 max-w-2xl leading-relaxed">
-              Conversaciones reales con un agente de IA en 7 sectores. Verificación biométrica, firma digital y procesos
-              end-to-end ─ adaptados al mercado chileno.
+              <span className="text-white">Diseñamos, construimos y desplegamos agentes de IA con Agentforce</span>{" "}
+              específicos para cada industria. De la cotización al post-venta, con identidad verificada y orquestación
+              nativa Salesforce — adaptados a la regulación y el negocio chileno.
             </p>
             <div className="flex flex-wrap gap-6 mt-10 text-sm">
-              <Stat value="7" label="Industrias" />
+              <Stat value="7" label="Industrias verticalizadas" />
               <Divider />
-              <Stat value="28+" label="Módulos" />
+              <Stat value="28+" label="Casos de uso construidos" />
               <Divider />
-              <Stat value="100%" label="Cumplimiento normativo" />
+              <Stat value="6 sem" label="De diseño a producción" />
             </div>
           </motion.div>
         </div>
@@ -184,8 +194,10 @@ export default function HomePage() {
       <main className="flex-grow container mx-auto px-4 py-12 md:py-16">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Selecciona una industria</h2>
-            <p className="text-slate-600 mt-1">Cada demo simula una conversación end-to-end con el agente.</p>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Explora Agentforce por industria</h2>
+            <p className="text-slate-600 mt-1">
+              Cada demo recorre un proceso real end-to-end: identidad, conversación, decisión y cierre.
+            </p>
           </div>
           <div className="inline-flex rounded-lg bg-white border shadow-sm p-1 self-start md:self-auto">
             {categories.map((c) => (
@@ -237,6 +249,7 @@ function Stat({ value, label }: { value: string; label: string }) {
 function Divider() {
   return <div className="w-px h-12 bg-white/20 self-center" />
 }
+
 
 function IndustryCard({ industry, index }: { industry: Industry; index: number }) {
   const Icon = industry.icon
