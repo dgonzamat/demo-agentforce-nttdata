@@ -138,15 +138,15 @@ export default function HomePage() {
           </div>
           <div className="flex items-center gap-1">
             <Link href="/dashboard">
-              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
-                <BarChart3 className="h-4 w-4 mr-2" />
-                Action Tracker
+              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900 px-2 sm:px-3">
+                <BarChart3 className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Action Tracker</span>
               </Button>
             </Link>
             <Link href="/modules">
-              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
-                <Layers className="h-4 w-4 mr-2" />
-                Catálogo de módulos
+              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900 px-2 sm:px-3">
+                <Layers className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Módulos</span>
               </Button>
             </Link>
           </div>

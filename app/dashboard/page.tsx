@@ -43,6 +43,8 @@ import {
   CheckCircle2,
   Shield,
   ChevronRight,
+  Menu,
+  X,
 } from "lucide-react"
 import { asset } from "@/lib/asset"
 
@@ -131,46 +133,82 @@ const navItems: { icon: typeof Home; label: string; active?: boolean; children?:
 
 export default function DashboardPage() {
   const [activeNav, setActiveNav] = useState("Panel de Control")
+  const [navOpen, setNavOpen] = useState(false)
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       {/* Top bar */}
-      <div className="bg-[#0d2147] text-white flex items-center px-4 h-14 shrink-0">
-        <Link href="/" className="flex items-center gap-3 shrink-0">
-          <img src={asset("/salesforce-logo.svg")} alt="Salesforce" className="h-8" />
-          <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 brightness-0 invert" />
-          <span className="text-blue-200/40 text-xl">|</span>
-          <span className="font-medium text-lg">Agentforce</span>
+      <div className="bg-[#0d2147] text-white flex items-center px-3 sm:px-4 h-14 shrink-0 gap-2">
+        <button
+          onClick={() => setNavOpen(true)}
+          className="lg:hidden w-9 h-9 flex items-center justify-center hover:bg-white/10 rounded-md transition shrink-0"
+          aria-label="Abrir menú"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        <Link href="/" className="flex items-center gap-2 sm:gap-3 shrink-0 min-w-0">
+          <img src={asset("/salesforce-logo.svg")} alt="Salesforce" className="h-7 sm:h-8 shrink-0" />
+          <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-5 sm:h-6 brightness-0 invert shrink-0" />
+          <span className="hidden sm:inline text-blue-200/40 text-xl">|</span>
+          <span className="hidden sm:inline font-medium text-base sm:text-lg truncate">Agentforce</span>
         </Link>
-        <div className="flex-1 max-w-2xl mx-auto px-4">
+        <div className="hidden md:block flex-1 max-w-2xl mx-auto px-4">
           <div className="bg-white/10 hover:bg-white/15 transition rounded-md flex items-center px-3 h-9 text-sm text-blue-100/80">
             <Search className="h-4 w-4 mr-2" />
             <span>Buscar en Salesforce</span>
           </div>
         </div>
+        <div className="flex-1 md:hidden" />
         <div className="flex items-center gap-1 shrink-0">
+          <button className="md:hidden w-9 h-9 flex items-center justify-center hover:bg-white/10 rounded-md transition">
+            <Search className="h-4 w-4" />
+          </button>
           {[Star, Plus, HelpCircle, Settings, Bell].map((Icon, i) => (
-            <button key={i} className="w-9 h-9 flex items-center justify-center hover:bg-white/10 rounded-md transition">
+            <button
+              key={i}
+              className={`${i < 2 ? "hidden xl:flex" : i < 3 ? "hidden lg:flex" : "hidden sm:flex"} w-9 h-9 items-center justify-center hover:bg-white/10 rounded-md transition`}
+            >
               <Icon className="h-4 w-4" />
             </button>
           ))}
-          <div className="w-9 h-9 ml-1 rounded-md bg-blue-500 flex items-center justify-center ring-2 ring-blue-300/40">
-            <Bot className="h-5 w-5 text-white" />
+          <div className="w-8 h-8 sm:w-9 sm:h-9 ml-1 rounded-md bg-blue-500 flex items-center justify-center ring-2 ring-blue-300/40 shrink-0">
+            <Bot className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
           </div>
         </div>
       </div>
 
       <div className="flex flex-1">
-        {/* Sidebar */}
-        <aside className="w-56 bg-white border-r flex flex-col shrink-0">
-          <nav className="flex-1 py-4">
+        {/* Mobile drawer overlay */}
+        {navOpen && (
+          <div
+            onClick={() => setNavOpen(false)}
+            className="lg:hidden fixed inset-0 bg-slate-900/40 z-40"
+            aria-hidden
+          />
+        )}
+        {/* Sidebar — drawer on mobile, fixed on desktop */}
+        <aside
+          className={`bg-white border-r flex flex-col shrink-0 transition-transform fixed lg:static inset-y-0 left-0 z-50 lg:z-0 w-64 lg:w-56 ${
+            navOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          }`}
+        >
+          <div className="lg:hidden flex items-center justify-between px-5 h-14 border-b">
+            <span className="font-semibold text-slate-900">Menú</span>
+            <button onClick={() => setNavOpen(false)} className="w-8 h-8 flex items-center justify-center text-slate-500">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <nav className="flex-1 py-4 overflow-y-auto">
             {navItems.map((item) => {
               const Icon = item.icon
               const isActive = item.label === activeNav
               return (
                 <div key={item.label}>
                   <button
-                    onClick={() => setActiveNav(item.label)}
+                    onClick={() => {
+                      setActiveNav(item.label)
+                      setNavOpen(false)
+                    }}
                     className={`w-full flex items-center gap-3 px-5 py-2.5 text-sm transition relative ${
                       isActive
                         ? "text-blue-700 font-semibold bg-blue-50/60"
@@ -207,22 +245,25 @@ export default function DashboardPage() {
         {/* Main content */}
         <main className="flex-1 min-w-0">
           {/* Title bar */}
-          <div className="bg-[#0a1d40] text-white px-6 py-5 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center ring-2 ring-blue-300/40">
-                <Bot className="h-6 w-6 text-white" />
+          <div className="bg-[#0a1d40] text-white px-4 sm:px-6 py-4 sm:py-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center ring-2 ring-blue-300/40 shrink-0">
+                <Bot className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight">Agentforce Action Tracker</h1>
-                <p className="text-sm text-blue-100/80">Monitorea, gestiona y optimiza las acciones de tus agentes.</p>
+              <div className="min-w-0">
+                <h1 className="text-lg sm:text-2xl font-bold tracking-tight truncate">Agentforce Action Tracker</h1>
+                <p className="text-xs sm:text-sm text-blue-100/80 hidden sm:block">
+                  Monitorea, gestiona y optimiza las acciones de tus agentes.
+                </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button className="bg-white/10 hover:bg-white/15 transition rounded-md flex items-center gap-2 px-3 h-9 text-sm">
+            <div className="flex items-center gap-2 flex-wrap">
+              <button className="bg-white/10 hover:bg-white/15 transition rounded-md flex items-center gap-2 px-3 h-9 text-xs sm:text-sm">
                 <Calendar className="h-4 w-4" />
-                <span>May 6 - Jun 2, 2025</span>
+                <span className="hidden sm:inline">May 6 - Jun 2, 2025</span>
+                <span className="sm:hidden">May - Jun</span>
               </button>
-              <button className="bg-white text-slate-800 rounded-md flex items-center gap-2 px-3 h-9 text-sm font-medium">
+              <button className="bg-white text-slate-800 rounded-md flex items-center gap-2 px-3 h-9 text-xs sm:text-sm font-medium">
                 <Filter className="h-4 w-4" />
                 <span>Filtrar</span>
               </button>
@@ -232,7 +273,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="p-6 space-y-6">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* KPI row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               <Kpi label="Acciones Totales" value="12,458" delta="+18.6% vs. período anterior" sparkData={sparkUp} sparkColor="#3b82f6" deltaColor="text-blue-600" />
