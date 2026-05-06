@@ -172,15 +172,16 @@ export default function HomePage() {
               por Industria
             </h1>
             <p className="text-lg md:text-xl text-blue-100/90 max-w-2xl leading-relaxed">
-              Conversaciones reales con un agente de IA en 7 sectores. Verificación biométrica, firma digital y procesos
-              end-to-end ─ adaptados al mercado chileno.
+              Agentes de IA generativa que resuelven procesos completos —de la primera consulta a la firma digital— con
+              identidad verificada y orquestación nativa Salesforce. <span className="text-white">Listos para
+              producción en el mercado chileno.</span>
             </p>
             <div className="flex flex-wrap gap-6 mt-10 text-sm">
-              <Stat value="7" label="Industrias" />
+              <Stat value="7" label="Industrias verticalizadas" />
               <Divider />
-              <Stat value="28+" label="Módulos" />
+              <Stat value="28+" label="Casos de uso" />
               <Divider />
-              <Stat value="100%" label="Cumplimiento normativo" />
+              <Stat value="6 sem" label="Time-to-production" />
             </div>
           </motion.div>
         </div>
@@ -189,8 +190,10 @@ export default function HomePage() {
       <main className="flex-grow container mx-auto px-4 py-12 md:py-16">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Selecciona una industria</h2>
-            <p className="text-slate-600 mt-1">Cada demo simula una conversación end-to-end con el agente.</p>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Explora Agentforce por industria</h2>
+            <p className="text-slate-600 mt-1">
+              Cada demo recorre un proceso real end-to-end: identidad, conversación, decisión y cierre.
+            </p>
           </div>
           <div className="inline-flex rounded-lg bg-white border shadow-sm p-1 self-start md:self-auto">
             {categories.map((c) => (
