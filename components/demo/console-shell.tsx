@@ -50,7 +50,7 @@ export function ConsoleShell({
   onReset,
 }: ConsoleShellProps) {
   return (
-    <div className="flex flex-col min-h-screen bg-slate-100">
+    <div className="flex flex-col min-h-screen lg:h-screen lg:overflow-hidden bg-slate-100">
       {/* Top dark navy bar - Salesforce + NTT DATA + Agentforce */}
       <div className="bg-[#0d2147] text-white flex items-center px-4 h-14 shrink-0">
         <Link href="/" className="flex items-center gap-3 shrink-0">
@@ -111,10 +111,10 @@ export function ConsoleShell({
       )}
 
       {/* Main 3-column body */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)_320px] gap-4 p-4 max-w-[1600px] w-full mx-auto">
-        <aside className="space-y-4 order-2 lg:order-1 min-w-0">{leftPanel}</aside>
-        <main className="order-1 lg:order-2 min-w-0">{children}</main>
-        <aside className="space-y-4 order-3 min-w-0">{rightPanel}</aside>
+      <div className="flex-1 lg:overflow-hidden grid grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)_320px] gap-4 p-4 max-w-[1600px] w-full mx-auto">
+        <aside className="space-y-4 order-2 lg:order-1 min-w-0 lg:overflow-y-auto lg:pr-1">{leftPanel}</aside>
+        <main className="order-1 lg:order-2 min-w-0 lg:overflow-hidden">{children}</main>
+        <aside className="space-y-4 order-3 min-w-0 lg:overflow-y-auto lg:pr-1">{rightPanel}</aside>
       </div>
 
       {/* Bottom utility bar */}
