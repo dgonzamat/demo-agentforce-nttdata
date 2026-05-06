@@ -2,33 +2,74 @@
 
 import { useState } from "react"
 import {
-  Play,
-  Pause,
-  RefreshCw,
+  Check,
+  Building,
+  Building2,
+  User,
+  Briefcase,
+  Activity,
+  Sparkles,
+  ChevronRight,
+  Phone,
+  ShoppingBag,
+  Plane,
+  HardHat,
+  Zap,
+  CreditCard,
+  TrendingUp,
+  Star,
   HelpCircle,
-  Maximize,
-  Shield,
+  FileText,
   FileCheck,
-  AlertTriangle,
-  Users,
-  ClipboardCheck,
+  FileSignature,
+  CheckCircle,
+  BarChart,
+  Heart,
+  Shield,
+  Umbrella,
+  Wifi,
+  Database,
+  Headphones,
+  Tag,
+  Truck,
+  ClipboardList,
   Calendar,
-  BarChart2,
+  PlaneTakeoff,
+  PlaneLanding,
+  MapPin,
+  Compass,
+  Settings,
+  AlertTriangle,
+  Hammer,
+  Lightbulb,
+  Droplet,
+  Receipt,
+  Gauge,
+  Lock,
+  Network,
+  Server,
+  DollarSign,
+  Percent,
+  ShoppingCart,
+  Search,
+  Edit,
   Bell,
+  ClipboardCheck,
+  Users,
+  Clock,
+  BarChart2,
+  PlaneIcon as Airplane,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { useConversationPlayer } from "@/hooks/use-conversation-player"
 import { useIdentityVerification } from "@/hooks/use-identity-verification"
 import { useDigitalSignature } from "@/hooks/use-digital-signature"
 import { useFullscreen } from "@/hooks/use-fullscreen"
-import { ProcessRoadmap } from "@/components/demo/process-roadmap"
 import { IdentityPanel } from "@/components/demo/identity-panel"
 import { SignaturePanel } from "@/components/demo/signature-panel"
-import { StepTimer } from "@/components/demo/step-timer"
-import { MinimalControls } from "@/components/demo/minimal-controls"
-import { MessageRenderer } from "@/components/demo/message-renderer"
-import { downloadDemo } from "@/utils/download-demo"
 import { ContractorCompliancePanel } from "@/components/demo/contractor-compliance-panel"
+import { MessageRenderer } from "@/components/demo/message-renderer"
+import { ConsoleShell, ConsoleCard, FieldRow } from "@/components/demo/console-shell"
+import { ChatPanel } from "@/components/demo/chat-panel"
 import { asset } from "@/lib/asset"
 
 export default function MineriaDemo() {
@@ -220,224 +261,254 @@ export default function MineriaDemo() {
     resetSignature()
   }
 
+  const currentStageName = processStages.find((s) => s.id === currentProcessStage)?.name || ""
+
   return (
-    <div className="flex flex-col min-h-screen bg-[#f0f4f8]" ref={containerRef}>
-      {/* Header - Only visible when not in fullscreen */}
-      {!fullscreen && (
-        <header className="bg-white border-b py-2 px-4 flex items-center justify-between sticky top-0 z-10">
-          <div className="flex items-center">
-            <div className="bg-blue-900 px-2 py-1 rounded">
-              <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 md:h-8 mr-4 filter brightness-0 invert" />
+    <ConsoleShell
+      industryConsole="Mining Service Console"
+      customerName="Andes Servicios SpA"
+      playing={playing}
+      progress={progress}
+      onTogglePlay={togglePlay}
+      onReset={handleReset}
+      leftPanel={
+        <>
+          <ConsoleCard
+            icon={
+              <div className="w-9 h-9 rounded-md bg-slate-100 flex items-center justify-center">
+                <User className="h-5 w-5 text-slate-500" />
+              </div>
+            }
+            title="Customer"
+          >
+            <div className="text-base font-semibold text-slate-900 -mt-2 mb-3">Andes Servicios SpA</div>
+            <div className="grid grid-cols-2 gap-3">
+              <FieldRow label="RUT" value="76.543.210-K" />
+              <FieldRow label="Tipo" value="Contratista" />
+              <FieldRow label="Vigente desde" value="Jul 18, 2020" />
+              <FieldRow label="Faena asignada" value="Los Pelambres" />
             </div>
-          </div>
-          <div className="flex space-x-2 md:space-x-4">
-            <Button
-              variant={playing ? "destructive" : "default"}
-              onClick={togglePlay}
-              className="flex items-center text-xs md:text-sm"
-            >
-              {playing ? (
-                <Pause className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-              ) : (
-                <Play className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-              )}
-              {playing ? "Pausar" : progress === 100 ? "Reiniciar" : "Reproducir"}
-            </Button>
-            <Button variant="outline" onClick={handleReset} className="flex items-center text-xs md:text-sm">
-              <RefreshCw className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-              Reiniciar
-            </Button>
-            <Button variant="outline" onClick={toggleFullscreen} className="flex items-center text-xs md:text-sm">
-              <Maximize className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-              <span className="hidden sm:inline">Pantalla Completa</span>
-            </Button>
-            <Button
-              variant="default"
-              onClick={() => downloadDemo(containerRef)}
-              className="flex items-center text-xs md:text-sm bg-green-600 hover:bg-green-700"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span className="hidden sm:inline">Descargar para LinkedIn</span>
-              <span className="sm:hidden">Descargar</span>
-            </Button>
-          </div>
-        </header>
-      )}
+          </ConsoleCard>
 
-      <div className={`flex-1 py-4 px-3 md:py-6 md:px-4 relative ${fullscreen ? "bg-black" : ""}`}>
-        {/* Progress bar - Only visible when not in fullscreen */}
-        {!fullscreen && (
-          <div className="max-w-5xl mx-auto mb-4 bg-white rounded-full h-2.5 overflow-hidden">
-            <div
-              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-        )}
+          <ConsoleCard
+            icon={
+              <div className="w-7 h-7 rounded-md bg-blue-50 flex items-center justify-center">
+                <Briefcase className="h-4 w-4 text-blue-600" />
+              </div>
+            }
+            title="Customer 360"
+          >
+            <div className="-mx-4 -mt-4 px-4 border-b flex gap-4 text-xs">
+              {['Summary', 'Compliance', 'Personal', 'Related'].map((t, i) => (
+                <button
+                  key={t}
+                  className={`py-2 -mb-px ${
+                    i === 0
+                      ? "text-blue-600 border-b-2 border-blue-600 font-medium"
+                      : "text-slate-500 hover:text-slate-700"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+            <div className="space-y-3 pt-4">
+              <Row label="Trabajadores activos" value="147" />
+              <Row label="Tasa de cumplimiento" value="96%" />
+              <Row label="Auditorías últ. año" value="4" />
+              <Row label="Incidentes (12m)" value="0" />
+              <Row label="Cert. seguridad" value="Vigente" />
+              <Row label="Risk Score" value={<span className="bg-emerald-100 text-emerald-700 text-xs font-medium px-2 py-0.5 rounded">Low</span>} />
+            </div>
+          </ConsoleCard>
 
-        <div className={`max-w-6xl mx-auto ${fullscreen ? "flex flex-col h-full justify-center items-center" : ""}`}>
-          {/* Process roadmap - Always visible */}
-          <div className={`${fullscreen ? "w-full max-w-4xl mb-4" : ""}`}>
-            <ProcessRoadmap stages={processStages} currentStage={currentProcessStage} />
-          </div>
-
-          <div className={`grid grid-cols-1 md:grid-cols-7 gap-4 ${fullscreen ? "w-full max-w-4xl" : ""}`}>
-            {/* Side space */}
-            {!fullscreen && <div className="md:col-span-1">{/* Optional content */}</div>}
-
-            {/* Main chat */}
-            <div className={`${fullscreen ? "md:col-span-7" : "md:col-span-5"}`}>
-              <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6 border-8 border-gray-800 rounded-3xl relative">
-                {/* Mobile notch */}
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1/4 h-6 bg-gray-800 rounded-b-lg z-10"></div>
-
-                {/* Header redesign */}
-                <div className="bg-blue-900 text-white p-3 md:p-4">
-                  <div className="flex justify-end mb-4">
-                    <img src={asset("/ntt-data-logo.png")} alt="NTT DATA" className="h-6 md:h-8 filter brightness-0 invert" />
-                  </div>
-
-                  <div className="flex items-center mt-4">
-                    <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-white mr-3 flex items-center justify-center">
-                      <img
-                        src={avatars.bot || "/placeholder.svg"}
-                        alt="AgentForce"
-                        className="w-full h-full object-cover"
-                      />
+          <ConsoleCard title="Etapas del proceso">
+            <ol className="space-y-0.5 -mx-1">
+              {processStages.map((stage) => {
+                const Icon = stage.icon
+                const isDone = currentProcessStage > stage.id
+                const isActive = currentProcessStage === stage.id
+                return (
+                  <li key={stage.id} className="relative">
+                    <div
+                      className={`flex items-center gap-2.5 p-1.5 rounded transition-colors ${
+                        isActive ? "bg-blue-50" : ""
+                      }`}
+                    >
+                      <div
+                        className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${
+                          isDone
+                            ? "bg-blue-600 text-white"
+                            : isActive
+                            ? "bg-white border-2 border-blue-600 text-blue-600"
+                            : "bg-slate-100 text-slate-400"
+                        }`}
+                      >
+                        {isDone ? <Check className="h-3 w-3" /> : <Icon className="h-3 w-3" />}
+                      </div>
+                      <span
+                        className={`text-xs leading-tight ${
+                          isActive
+                            ? "font-semibold text-slate-900"
+                            : isDone
+                            ? "text-slate-700"
+                            : "text-slate-500"
+                        }`}
+                      >
+                        {stage.name}
+                      </span>
                     </div>
-                    <div>
-                      <h2 className="text-lg md:text-xl font-semibold">AgentForce</h2>
-                      <p className="text-xs md:text-sm text-blue-100">Gestión de Contratistas Mineros</p>
-                    </div>
-                  </div>
-                </div>
+                  </li>
+                )
+              })}
+            </ol>
+          </ConsoleCard>
+        </>
+      }
+      rightPanel={
+        <>
+          <ConsoleCard
+            icon={
+              <div className="w-7 h-7 rounded-md bg-blue-50 flex items-center justify-center">
+                <HardHat className="h-4 w-4 text-blue-600" />
+              </div>
+            }
+            title="Verificación normativa"
+            badge={
+              <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded">En proceso</span>
+            }
+          >
+            <div className="space-y-3">
+              <FieldRow label="Documento principal" value="Plan de Seguridad" />
+              <FieldRow label="Norma aplicada" value="DS-132 Minería" />
+              <FieldRow label="Vencimiento" value="Dec 31, 2025" />
+              <FieldRow label="Inspector" value="Marco Bravo" />
+              <FieldRow label="Faena" value="Los Pelambres" />
+            </div>
+          </ConsoleCard>
 
-                <div className="p-3 md:p-4">
-                  <div className="bg-gray-50 rounded-lg p-3 md:p-4 h-[400px] md:h-[500px] lg:h-[600px] overflow-y-auto">
-                    <div className="space-y-2">
-                      {messages.map(
-                        (msg, index) =>
-                          msg.visible && (
-                            <div key={index}>
-                              <MessageRenderer
-                                message={msg}
-                                avatars={avatars}
-                                renderSignaturePanel={
-                                  msg.showSignaturePanel && !msg.typing
-                                    ? () => (
-                                        <SignaturePanel
-                                          signatureComplete={signatureComplete}
-                                          completeSignature={completeSignature}
-                                        />
-                                      )
-                                    : undefined
-                                }
-                                renderIdentityPanel={
-                                  msg.showIdentityPanel && !msg.typing
-                                    ? () => (
-                                        <IdentityPanel
-                                          faceScanComplete={faceScanComplete}
-                                          scanProgress={scanProgress}
-                                          faceDetected={faceDetected}
-                                          startFaceScan={startFaceScan}
-                                          completeIdentity={completeIdentity}
-                                        />
-                                      )
-                                    : undefined
-                                }
-                                renderContractorPanel={
-                                  msg.showContractorPanel && !msg.typing
-                                    ? () => <ContractorCompliancePanel compliance={contractorCompliance} />
-                                    : undefined
-                                }
-                              />
-                            </div>
-                          ),
-                      )}
-                      <div ref={messagesEndRef} />
-                    </div>
-                  </div>
+          <ConsoleCard
+            icon={
+              <div className="w-7 h-7 rounded-md bg-emerald-50 flex items-center justify-center">
+                <Sparkles className="h-4 w-4 text-emerald-600" />
+              </div>
+            }
+            title="Recommended Next Best Action"
+          >
+            <div className="space-y-3">
+              <NextAction
+                title="Renovar curso de altura física"
+                description="12 trabajadores con vencimiento próximo. Programar capacitación."
+                cta="Agendar"
+              />
+              <NextAction
+                title="Auditoría documental anticipada"
+                description="Adelantar revisión reduce riesgo de hallazgos en auditoría externa."
+                cta="Programar auditoría"
+              />
+            </div>
+          </ConsoleCard>
 
-                  {/* Mobile control bar */}
-                  <div className="h-6 mt-2 flex justify-center">
-                    <div className="w-1/3 h-1 bg-gray-300 rounded-full"></div>
+          <ConsoleCard
+            icon={
+              <div className="w-7 h-7 rounded-md bg-violet-50 flex items-center justify-center">
+                <Activity className="h-4 w-4 text-violet-600" />
+              </div>
+            }
+            title="Etapa actual"
+          >
+            <div className="space-y-3">
+              <FieldRow label="Stage" value={currentStageName} />
+              <div>
+                <div className="text-slate-500 text-xs mb-1">Progreso</div>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-blue-600 transition-all duration-300"
+                      style={{ width: `${progress}%` }}
+                    />
                   </div>
+                  <span className="text-xs font-medium text-slate-700 tabular-nums">{Math.round(progress)}%</span>
                 </div>
               </div>
             </div>
-
-            {/* Side space */}
-            {!fullscreen && <div className="md:col-span-1">{/* Optional content */}</div>}
-          </div>
-        </div>
-      </div>
-
-      {/* Minimal controls in fullscreen */}
-      <MinimalControls
-        playing={playing}
-        togglePlay={togglePlay}
-        toggleFullscreen={toggleFullscreen}
-        visible={fullscreen && showMinimalControls}
-      />
-
-      {/* Floating timer */}
-      {autoPlay && !fullscreen && <StepTimer seconds={stepTimer} />}
-
-      {/* Floating buttons */}
-      {!fullscreen && !autoPlay && (
-        <>
-          {/* Fullscreen button */}
-          <div className="fixed bottom-4 left-4 z-20">
-            <Button
-              variant="default"
-              onClick={toggleFullscreen}
-              className="rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
-            >
-              <Maximize className="h-5 w-5" />
-            </Button>
-          </div>
-
-          {/* Download button */}
-          <div className="fixed bottom-4 right-4 z-20">
-            <Button
-              variant="default"
-              onClick={() => downloadDemo(containerRef)}
-              className="rounded-full w-12 h-12 flex items-center justify-center shadow-lg bg-green-600 hover:bg-green-700"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-            </Button>
-          </div>
+          </ConsoleCard>
         </>
-      )}
+      }
+    >
+      <ChatPanel assistantTitle="Agentforce Mining Assistant">
+        {messages.map(
+          (msg, index) =>
+            msg.visible && (
+              <MessageRenderer
+                key={index}
+                message={msg}
+                avatars={avatars}
+                renderSignaturePanel={
+                  msg.showSignaturePanel && !msg.typing
+                    ? () => (
+                        <SignaturePanel
+                          signatureComplete={signatureComplete}
+                          completeSignature={completeSignature}
+                        />
+                      )
+                    : undefined
+                }
+                renderIdentityPanel={
+                  msg.showIdentityPanel && !msg.typing
+                    ? () => (
+                        <IdentityPanel
+                          faceScanComplete={faceScanComplete}
+                          scanProgress={scanProgress}
+                          faceDetected={faceDetected}
+                          startFaceScan={startFaceScan}
+                          completeIdentity={completeIdentity}
+                        />
+                      )
+                    : undefined
+                }
+                renderContractorPanel={
+                  msg.showContractorPanel && !msg.typing
+                    ? () => (
+                        <ContractorCompliancePanel
+                          complianceComplete={complianceComplete}
+                          completeCompliance={completeCompliance}
+                          contractorVerified={contractorVerified}
+                          startContractorVerification={startContractorVerification}
+                        />
+                      )
+                    : undefined
+                }
+              />
+            ),
+        )}
+        <div ref={messagesEndRef} />
+      </ChatPanel>
+    </ConsoleShell>
+  )
+}
+
+
+function Row({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex items-center justify-between text-sm">
+      <span className="text-slate-500">{label}</span>
+      <span className="text-slate-900 font-medium">{value}</span>
+    </div>
+  )
+}
+
+function NextAction({ title, description, cta }: { title: string; description: string; cta: string }) {
+  return (
+    <div className="border rounded-md p-3">
+      <div className="flex items-start gap-2 mb-2">
+        <div className="text-sm font-semibold text-blue-700 leading-tight">{title}</div>
+      </div>
+      <p className="text-xs text-slate-600 leading-relaxed mb-2.5">{description}</p>
+      <button className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium">
+        {cta}
+        <ChevronRight className="h-3 w-3" />
+      </button>
     </div>
   )
 }
