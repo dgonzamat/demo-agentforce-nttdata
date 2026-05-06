@@ -13,7 +13,6 @@ import {
   HardHat,
   Zap,
   ArrowRight,
-  Sparkles,
   Layers,
   Cpu,
 } from "lucide-react"
@@ -155,16 +154,22 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm mb-6 backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5 text-blue-200" />
-              <span className="text-blue-100">IA generativa aplicada al negocio</span>
+            <div className="flex items-center gap-6 md:gap-10 mb-10">
+              <img
+                src={asset("/ntt-data-logo.png")}
+                alt="NTT DATA"
+                className="h-10 md:h-14 brightness-0 invert"
+              />
+              <div className="h-10 md:h-14 w-px bg-white/30" />
+              <SalesforceMark className="h-10 md:h-14" />
             </div>
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 leading-[1.1]">
-              Demos de AgentForce
-              <br />
+              Casos de Uso de{" "}
               <span className="bg-gradient-to-r from-blue-200 to-cyan-200 bg-clip-text text-transparent">
-                por industria
+                Agentforce
               </span>
+              <br />
+              por Industria
             </h1>
             <p className="text-lg md:text-xl text-blue-100/90 max-w-2xl leading-relaxed">
               Conversaciones reales con un agente de IA en 7 sectores. Verificación biométrica, firma digital y procesos
@@ -236,6 +241,25 @@ function Stat({ value, label }: { value: string; label: string }) {
 
 function Divider() {
   return <div className="w-px h-12 bg-white/20 self-center" />
+}
+
+function SalesforceMark({ className, light = true }: { className?: string; light?: boolean }) {
+  return (
+    <div className={`flex items-center gap-3 ${className || ""}`}>
+      <svg viewBox="0 0 200 140" className="h-full w-auto shrink-0" aria-hidden>
+        <path
+          fill="#00A1E0"
+          d="M83 32c8-9 19-14 32-14 17 0 32 10 39 24 5-2 11-3 17-3 23 0 42 19 42 42 0 8-2 16-7 23 6 5 9 13 9 21 0 16-13 29-29 29-2 0-4 0-6-1-4 13-16 22-30 22-7 0-13-2-18-5-5 12-17 21-31 21-15 0-27-9-32-22-3 1-7 1-10 1-19 0-34-15-34-33 0-12 6-22 16-28-2-5-3-10-3-15 0-21 17-37 38-37 6 0 11 1 17 4z"
+        />
+      </svg>
+      <span
+        className={`text-[1.6em] font-bold tracking-tight leading-none ${light ? "text-white" : "text-slate-900"}`}
+        style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
+      >
+        salesforce
+      </span>
+    </div>
+  )
 }
 
 function IndustryCard({ industry, index }: { industry: Industry; index: number }) {
