@@ -161,7 +161,11 @@ export default function HomePage() {
                 className="h-10 md:h-14 brightness-0 invert"
               />
               <div className="h-10 md:h-14 w-px bg-white/30" />
-              <SalesforceMark className="h-10 md:h-14" />
+              <img
+                src={asset("/salesforce-logo.svg")}
+                alt="Salesforce"
+                className="h-12 md:h-16"
+              />
             </div>
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 leading-[1.1]">
               Casos de Uso de{" "}
@@ -172,16 +176,16 @@ export default function HomePage() {
               por Industria
             </h1>
             <p className="text-lg md:text-xl text-blue-100/90 max-w-2xl leading-relaxed">
-              Agentes de IA generativa que resuelven procesos completos —de la primera consulta a la firma digital— con
-              identidad verificada y orquestación nativa Salesforce. <span className="text-white">Listos para
-              producción en el mercado chileno.</span>
+              <span className="text-white">Diseñamos, construimos y desplegamos agentes de IA con Agentforce</span>{" "}
+              específicos para cada industria. De la cotización al post-venta, con identidad verificada y orquestación
+              nativa Salesforce — adaptados a la regulación y el negocio chileno.
             </p>
             <div className="flex flex-wrap gap-6 mt-10 text-sm">
               <Stat value="7" label="Industrias verticalizadas" />
               <Divider />
-              <Stat value="28+" label="Casos de uso" />
+              <Stat value="28+" label="Casos de uso construidos" />
               <Divider />
-              <Stat value="6 sem" label="Time-to-production" />
+              <Stat value="6 sem" label="De diseño a producción" />
             </div>
           </motion.div>
         </div>
@@ -246,24 +250,6 @@ function Divider() {
   return <div className="w-px h-12 bg-white/20 self-center" />
 }
 
-function SalesforceMark({ className, light = true }: { className?: string; light?: boolean }) {
-  return (
-    <div className={`flex items-center gap-3 ${className || ""}`}>
-      <svg viewBox="0 0 256 180" className="h-full w-auto shrink-0" aria-hidden>
-        <path
-          fill="#00A1E0"
-          d="M106.4 36.1c8.1-8.4 19.4-13.6 31.9-13.6 16.6 0 31.1 9.2 38.8 23 6.7-3 14.1-4.7 21.9-4.7 30.1 0 54.6 24.7 54.6 55.2 0 30.5-24.4 55.2-54.6 55.2-3.7 0-7.3-.4-10.7-1.1-6.8 12.1-19.7 20.3-34.6 20.3-6.2 0-12.1-1.4-17.4-4-6.9 16.2-23 27.6-41.7 27.6-19.5 0-36.2-12.4-42.5-29.8-2.7.6-5.6.9-8.5.9-22.4 0-40.6-18.4-40.6-41.1 0-15.2 8.2-28.5 20.5-35.6-2.5-5.8-3.9-12.2-3.9-18.9 0-26.4 21.4-47.7 47.8-47.7 15.5 0 29.3 7.4 38 18.8z"
-        />
-      </svg>
-      <span
-        className={`text-[1.6em] font-semibold tracking-tight leading-none ${light ? "text-white" : "text-slate-900"}`}
-        style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif" }}
-      >
-        salesforce
-      </span>
-    </div>
-  )
-}
 
 function IndustryCard({ industry, index }: { industry: Industry; index: number }) {
   const Icon = industry.icon
