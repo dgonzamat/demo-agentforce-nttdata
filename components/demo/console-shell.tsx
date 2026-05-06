@@ -1,6 +1,6 @@
 "use client"
 
-import type { ReactNode } from "react"
+import { createContext, useContext, type ReactNode } from "react"
 import Link from "next/link"
 import {
   Search,
@@ -40,6 +40,24 @@ interface ConsoleShellProps {
   onReset?: () => void
 }
 
+interface CustomerContextValue {
+  name: string
+  initials: string
+}
+
+const CustomerContext = createContext<CustomerContextValue | null>(null)
+
+export function useCustomer(): CustomerContextValue | null {
+  return useContext(CustomerContext)
+}
+
+function deriveInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean)
+  if (!parts.length) return "?"
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+}
+
 export function ConsoleShell({
   industryConsole,
   customerName,
@@ -52,7 +70,9 @@ export function ConsoleShell({
   onReset,
 }: ConsoleShellProps) {
   const { fullscreen, containerRef, toggleFullscreen } = useFullscreen()
+  const customer: CustomerContextValue = { name: customerName, initials: deriveInitials(customerName) }
   return (
+    <CustomerContext.Provider value={customer}>
     <div
       ref={containerRef}
       className="flex flex-col min-h-screen lg:h-screen lg:overflow-hidden bg-slate-100"
@@ -190,6 +210,7 @@ export function ConsoleShell({
         </div>
       </div>
     </div>
+    </CustomerContext.Provider>
   )
 }
 

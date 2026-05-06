@@ -59,14 +59,9 @@ export function useConversationPlayer({ initialMessages, onStageChange, stepDura
 
   // Función para cambiar la velocidad de reproducción
   const changePlaybackSpeed = useCallback((speed: number) => {
-    console.log("useConversationPlayer: Cambiando velocidad a:", speed)
-    // Asegurarse de que la velocidad es un número válido
     if (typeof speed === "number" && !isNaN(speed) && speed > 0) {
       setPlaybackSpeed(speed)
       speedRef.current = speed
-      console.log("Velocidad actualizada a:", speed)
-    } else {
-      console.error("Velocidad inválida:", speed)
     }
   }, [])
 

@@ -290,7 +290,6 @@ export default function BankingPortabilityDemo() {
   }
 
   const handleSpeedChange = (speed: number) => {
-    console.log("Cambiando velocidad a:", speed)
     changePlaybackSpeed(speed)
   }
 
