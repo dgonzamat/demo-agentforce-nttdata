@@ -15,6 +15,7 @@ import {
   ArrowRight,
   Layers,
   Cpu,
+  BarChart3,
 } from "lucide-react"
 import { asset } from "@/lib/asset"
 
@@ -135,12 +136,20 @@ export default function HomePage() {
             <span className="text-slate-300">|</span>
             <span className="text-lg font-semibold tracking-tight">AgentForce</span>
           </div>
-          <Link href="/modules">
-            <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
-              <Layers className="h-4 w-4 mr-2" />
-              Catálogo de módulos
-            </Button>
-          </Link>
+          <div className="flex items-center gap-1">
+            <Link href="/dashboard">
+              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Action Tracker
+              </Button>
+            </Link>
+            <Link href="/modules">
+              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
+                <Layers className="h-4 w-4 mr-2" />
+                Catálogo de módulos
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 
