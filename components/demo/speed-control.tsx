@@ -19,7 +19,6 @@ export function SpeedControl({ currentSpeed, onSpeedChange, className = "" }: Sp
   }, [currentSpeed])
 
   const handleSpeedChange = (speed: number) => {
-    console.log("SpeedControl: Cambiando velocidad a:", speed)
     setLocalSpeed(speed)
     onSpeedChange(speed)
     setIsOpen(false)

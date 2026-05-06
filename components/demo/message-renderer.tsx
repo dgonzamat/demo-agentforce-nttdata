@@ -1,6 +1,9 @@
+"use client"
+
 import type { ReactNode } from "react"
 import { Bot } from "lucide-react"
 import type { MessageType } from "@/hooks/use-conversation-player"
+import { useCustomer } from "@/components/demo/console-shell"
 
 interface MessageRendererProps {
   message: MessageType
@@ -93,9 +96,7 @@ export function MessageRenderer({
             <div className="bg-blue-500 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm">{renderedText}</div>
             {timestamp && <div className="text-xs text-slate-400 mt-1 mr-1">{timestamp}</div>}
           </div>
-          <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-white shadow-sm shrink-0 bg-amber-100">
-            <img src={avatars.client || "/placeholder.svg"} alt="Cliente" className="w-full h-full object-cover" />
-          </div>
+          <CustomerAvatar fallbackSrc={avatars.client} />
         </div>
       )}
 
@@ -116,6 +117,22 @@ function BotIcon() {
   return (
     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 ring-2 ring-white shadow-sm flex items-center justify-center shrink-0">
       <Bot className="h-5 w-5 text-white" />
+    </div>
+  )
+}
+
+function CustomerAvatar({ fallbackSrc }: { fallbackSrc?: string }) {
+  const customer = useCustomer()
+  if (customer) {
+    return (
+      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 ring-2 ring-white shadow-sm flex items-center justify-center shrink-0 text-white text-xs font-semibold tracking-wide">
+        {customer.initials}
+      </div>
+    )
+  }
+  return (
+    <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-white shadow-sm shrink-0 bg-amber-100">
+      <img src={fallbackSrc || "/placeholder.svg"} alt="Cliente" className="w-full h-full object-cover" />
     </div>
   )
 }

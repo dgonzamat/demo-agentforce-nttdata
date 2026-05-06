@@ -58,7 +58,6 @@ export function MinimalControls({
           <SpeedControl
             currentSpeed={playbackSpeed || 1}
             onSpeedChange={(speed) => {
-              console.log("MinimalControls: Cambiando velocidad a:", speed)
               if (onSpeedChange) onSpeedChange(speed)
             }}
             className="bg-transparent text-white border-white border-opacity-50 hover:bg-white hover:bg-opacity-20 text-base font-medium"
